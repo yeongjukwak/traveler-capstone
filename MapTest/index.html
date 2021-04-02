@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Map_Path_Test</title>
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=^^"></script>
+<script>
+	var map;
+	// var posi = {
+	// 	"한림대학교" : [37.88728485257855, 127.73813767661932],
+	// 	"스카이워크" : [37.89456032346465, 127.72355022313691],
+	// 	"소양강댐" : [37.93790474873468, 127.80192826024657]
+	// }
+
+	// 임의의 좌표 데이터
+	let posi_x = [127.73813767661932, 127.72355022313691, 127.80192826024657];
+	let posi_y = [37.88728485257855, 37.89456032346465, 37.93790474873468];
+	var posi_size = posi_x.length;
+
+	// 페이지가 로딩이 된 후 호출하는 함수입니다.
+	function initMap(){
+			map = new Tmapv2.Map("map", {
+			center : new Tmapv2.LatLng(posi_y[0], posi_x[0]), // 지도 초기 좌표
+			zoom : 11,
+			width : "500px",
+			height : "400px"
+		});
+	};
+
+	// 경로 안내 함수
+	function path(){
+		var posi = new Map(); // 좌표 리스트
+		var imgURL; // 마커 이미지
+
+		// 좌표 리스트, 마커 생성
+		for(var i=0; i<posi_size; i++){
+			// 좌표 list
+			posi.set(i, new Tmapv2.LatLng(posi_y[i], posi_x[i]));
+
+			// 마커 이미지
+			if(i == 0){
+				imgURL = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
+			}
+			else if(i == posi_size-1){
+				imgURL = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
+			}else{
+				imgURL = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_p.png';
+			}
+
+			// 마커 생성
+			new Tmapv2.Marker({
+				position: posi.get(i),
+				icon: imgURL,
+				map: map
+			});
+		}
+	}
+
+	//데이터 로드중 실행하는 함수입니다.
+	function onProgress(){
+	}
+	
+	//데이터 로드 중 에러가 발생시 실행하는 함수입니다.
+	function onError(){
+		alert("onError");
+	}
+</script>
+</head>
+<body onload="initMap()">
+	<div id="map"></div>
+	<div><input type="button" onclick="path()" value="경로 안내"></div>
+</body>
+</html>
