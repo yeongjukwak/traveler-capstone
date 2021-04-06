@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <title>Document</title>
+    <style>
+      section {
+        margin-left: 10%;
+        margin-right: 10%;
+      }
+      .contact{
+        margin-top: 50px;
+
+      }
+      .contact #state_name {
+        font-size: 40px;
+        margin-bottom: 20px;
+      }
+      .contact .contact_VR {
+        
+        padding-left: 15%;
+        padding-bottom: 10px;
+      }
+      .contact .contact_text{
+        padding-top: 3%;
+        padding-left: 10%;   
+        padding-bottom: 5%;
+      }
+
+      .review{
+        margin: 5%;
+        padding: 5%;
+
+      }
+      .review_title{
+        font-size: 25px;
+      }
+      .review_input #review_input_text{
+        float: left;
+        margin-top: 30px;
+        width: 850px;
+        height: 50px;
+        padding: 10px;
+      }
+      .review_input input[type="button"]{
+        margin-top: 30px;
+        width: 70px;
+        height: 70px;
+      }
+      .review_content {
+        width: auto;
+      }
+      .review_content hr{
+        width: 97%;
+      }
+
+    </style>
+ 
+  </head>
+  <body>
+    <header>
+      <div class="wrapper">
+        <h1> LOGO </h1>
+        <!--<img src="LOGO.png" width="5%", height="5%"> -->
+        <ul class="menu">
+          <li><a href="#">이달의 추천 여행지</a></li>
+          <li><a href="#">나의 루트</a></li>
+        </ul>
+      </div>
+    </header>
+    <section>
+      <div class="contact">
+        <p id="state_name">관광지 이름</p>
+        <div class="contact_VR">
+          <img src="http://placehold.it/900x500">
+          <!--로드뷰 넣기-->
+        </div>
+        <div class="contact_text">
+          <p>설명~
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero eos dolorum quaerat quam fugit harum id distinctio! Hic consectetur laboriosam incidunt neque soluta, odit voluptatibus deserunt blanditiis excepturi. Expedita, atque.
+          </p>
+        </div>
+      </div>
+  
+      <div class="content">
+        <div class="content_text">
+          <span> 근처 관광지 둘러보기</span>
+        </div>
+        <div class="content_box">
+          <img src="http://placehold.it/300x200">
+          <p>
+            <h4>관광지이름</h4>
+            <a href="#">둘러보기</a>
+          </p>
+        </div>
+        <div class="content_box">
+          <img src="http://placehold.it/300x200">
+          <p>
+            <h4>관광지이름</h4>
+            <a href="#">둘러보기</a>
+          </p>
+        </div>
+        <div class="content_box">
+          <img src="http://placehold.it/300x200">
+          <p>
+            <h4>관광지이름</h4>
+            <a href="#">둘러보기</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="review">
+        <div class="review_title">
+          <p>여행자 평점 <span id="review_grade">4.3 ★★★★☆</span></p>
+        </div>
+        <div class="review_input">
+          <textarea id="review_input_text"></textarea>
+          <input type="button" value="등록">
+        </div><br>
+        <div class="review_content">
+          <p id="review_id">nickname  id****  xxxx-xx-xx</p><br>
+          <p id="review_text">Lorem ipsum, dolor sit amet consectetur adipisicing elit.lo Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus similique qui esse ex odio architecto sint inventore, placeat, quidem nostrum repellendus deleniti consequuntur fuga minima expedita provident eius repellat non.</p>
+          <br><hr>
+        </div>
+      </div>
+    </section>
+    
+    <footer>
+      <div class="footer">
+          <div>
+          <p>copyright</p>
+          </div>
+      </div>
+  </footer>
+  </body>
+</html>
