@@ -47,8 +47,20 @@
     height: 20px;
     border: 2px solid #bcbcbc;
     cursor: pointer;
-} 
-.container_box .container_map img{
+}
+.container_box .container_map{
+    position: relative;
+    width: 850px;
+    height: 850px;
+    display: inline-block;
+}
+.container_box .container_map #map_div{
+    position: absolute;
+    top: 0; left: 0;
+    width: 850px;
+    height: 850px;
+}
+/* .container_box .container_map img{
     width: 70%;
     float: left;
-}
+} */
