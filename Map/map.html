@@ -11,31 +11,9 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey="></script>
   <script>
-    var map;
-    var xhr;
     
-    // data.json
-    xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:5500/Map/map_data.json");
-    xhr.responseType = "json";
-    xhr.onload = function() {
-      var tripData = xhr.response.trip_data;
-      for(var i=0; i<tripData.length; i++){
-        $("#list").append("<hr><div class='container_list_el'>" +
-                            "<img src='" + tripData[i].image + "'>" +
-                            "<div class='container_list_el_name'>" +
-                              "<span class='container_list_el_name_check'>" +
-                                "<input type='checkbox'>" +
-                              "</span>" +
-                              "<span>" + tripData[i].spot + "</span>" +
-                              "<p>" + tripData[i].description + "</p>" +
-                            "</div>" +
-                          "</div>");
-      }
-    }
-    xhr.send();
-     
-    // 지도 onload
+    // 지도 생성
+    var map;
     function initMap(){
       map = new Tmapv2.Map("map_div", {
 				center : new Tmapv2.LatLng(37.88728485257855, 127.73813767661932),
@@ -43,6 +21,58 @@
 				zoomControl: false,
 				scrollwheel: true
 			});
+    }
+
+    var resp;
+    $.ajax({
+      url : "map_data.json",
+      type : "GET",
+      dataType : "json",
+      success: function(response){
+        resp = response.trip_data;
+
+        tripList(resp);
+      }
+    });
+
+    // 여행지 리스트
+    function tripList(trip_data){
+      for(var i=0; i<trip_data.length; i++){
+        var data = trip_data[i];
+        $("#list").append("<hr><div class='container_list_el'>" +
+                            "<img src='" + data.image + "'>" +
+                            "<div class='container_list_el_name'>" +
+                              "<span class='container_list_el_name_check'>" +
+                                "<input type='checkbox' name='btn" + i + "' onclick='setMarker("+ i +")'>" +
+                              "</span>" +
+                              "<span>" + data.spot + "</span>" +
+                              "<p>" + data.description + "</p>" +
+                            "</div>" +
+                          "</div>");
+      }
+    }
+
+    // 마커 생성
+    var markers = [];
+    function setMarker(s){
+      var check = $("input:checkbox[name='btn" + s + "']").is(":checked");
+      var data = resp[s];
+      var lonlat = new Tmapv2.LatLng(data.y, data.x);
+      var title = data.spot;
+
+      if(check){
+        var marker = new Tmapv2.Marker({
+					position : lonlat,
+					icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_p.png",
+					map : map,
+					title : title
+				});
+        markers[s] = marker;
+        //markers[s]._marker_data.options.title
+      }
+      else{
+        markers[s].setMap(null);
+      }
     }
   </script>
 </head>
