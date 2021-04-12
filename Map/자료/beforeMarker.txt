@@ -1,0 +1,211 @@
+    // 마커 생성 (최대 5개)
+    var markers = new Array(5);
+    var popUps = [];
+    function setMarker(ckbox_id_number){
+      var check = $("input:checkbox[id='ckbox" + ckbox_id_number + "']").is(":checked");
+      //var data = trip_response[ckbox_id_number];
+      var point = $("input:checkbox[id='ckbox" + ckbox_id_number + "']").val();
+      var title = $("input:checkbox[id='ckbox" + ckbox_id_number + "']").attr('name');
+      var x = "", y = "";
+      var jum = point.indexOf(',');
+      for(var i=0; i<point.length; i++){
+        if(i < jum){
+          y += point[i];
+        }
+        else if(i > jum){
+          x += point[i];
+        }
+      }
+
+      // checkBox == true
+      if(check == true){
+        // 마커가 최대로 생성될 경우 처리
+        if(markers[markers.length-1] != null){
+          alert("여행지는 최대 "+ markers.length +"개까지 선택 가능합니다.");
+          $("input:checkbox[id='ckbox" + ckbox_id_number + "']").prop("checked", false);
+          return;
+        } 
+
+        // 마커 생성
+        var marker = new Tmapv2.Marker({
+					position : new Tmapv2.LatLng(y, x),
+					icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_p.png",
+					map : map,
+					title : title
+          //visible:
+				});
+
+        // 팝업 content
+        var content = "<div class='m-pop'>"+
+					              "<div class='img-box'></div>"+
+					              "<div class='info-box'>"+
+					                "<p class='p-info'>"+
+					                  "<span class='tit'>" + title + "</span>"+
+					                  "<a href='http://tmapapi.sktelecom.com/' target='_blank' class='link'>홈페이지</a>"+
+					                "</p>"+
+					                "<ul class='ul-info'>"+
+				              	    "<li class='li-addr'>"+
+					                    "<p class='new-addr'>서울특별시 중구 을지로 65</p>"+
+					                    "<p class='old-addr'>(우)04539 (지번)을지로 2가 11</p>"+
+					                  "</li>"+
+					                  "<li class='li-tell'>"+
+					                    "<span class='tell'>1588-8787</span>"+
+					                  "</li>"+
+					                "</ul>"+
+					              "</div>"+
+					              "<a href='javascript:void(0)' onclick='onClose(" + ckbox_id_number + ")' class='btn-close'></a>"+
+					            "</div>";
+
+        //마커에 클릭이벤트 등록
+        marker.addListener("click", function(event) {
+          // 중복 제거
+          if(popUps[ckbox_id_number] != null){
+            onClose(ckbox_id_number);
+          }
+          //Popup 객체 생성.
+          var infoWindow = new Tmapv2.InfoWindow({
+            position: new Tmapv2.LatLng(marker._marker_data.options.position._lat, marker._marker_data.options.position._lng),
+            content: content, //Popup 표시될 text
+            type: 2, //Popup의 type 설정.
+            map: map
+          });
+          popUps[ckbox_id_number] = infoWindow;
+        });
+
+        
+        for(var i=0; i<markers.length; i++){
+          if(markers[i] == null){
+            markers[i] = marker;
+            break;
+          }
+        }
+      }
+      // checkBox == false
+      else{
+        // 삭제할 마커 찾기
+        for(var i=0; i<markers.length; i++){
+          // 삭제할 마커를 찾은 경우
+          if(markers[i]._marker_data.options.title == title){
+            markers[i].setMap(null);
+            if(popUps[ckbox_id_number] != null){
+              onClose(ckbox_id_number);
+            }
+            // 마지막 마커를 삭제하는 경우
+            if(i == markers.length-1){
+              markers[i] = null;
+            }
+            // 처음이나 중간 마커를 삭제하는 경우
+            else{
+              for(var j=i; j<markers.length; j++){
+                if(markers[j+1] != null){
+                  markers[j] = markers[j+1];
+                  markers[j+1] = null;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    //닫기 아이콘 클릭시 호출되는 함수.
+    function onClose(popup){
+	    popUps[popup].setVisible(false);
+    }
+
+    // 경로탐색
+    //var path_response;
+    var headers = {};
+    headers["appKey"]= "";
+    function path(){
+      var cnt = 0;
+      var data = markers;
+      for(var i=0; i<data.length; i++){
+        if(data[i] != null){
+          cnt++;
+        }
+      }
+      var startX = data[0]._marker_data.options.position._lng;
+      var startY = data[0]._marker_data.options.position._lat;
+      var endX = data[cnt-1]._marker_data.options.position._lng;
+      var endY = data[cnt-1]._marker_data.options.position._lat;
+      var passList = "";
+      for(var i=1; i<cnt-1; i++){
+				if(passList != "")
+					passList += "_"; 	
+				passList += data[i]._marker_data.options.position._lng + "," + data[i]._marker_data.options.position._lat;
+			}
+      $.ajax({
+        method: "POST", 
+        headers: headers, 
+        url: "https://apis.openapi.sk.com/tmap/routes?version=1&format=json",
+        async: false,
+        data: {
+          startX: startX,
+          startY: startY,
+          endX: endX,
+          endY: endY,
+          passList: passList,
+          reqCoordType : "WGS84GEO",
+					resCoordType : "WGS84GEO",
+          searchOption : "0",
+					trafficInfo : "Y" // 교통정보 표시
+        },
+        success: function(response){
+          //path_response = response;
+          drawPath(response);
+        },
+        error: function(error){
+          alert("여행 경로를 불러오지 못 했습니다.");
+        }
+      });
+    }
+
+    
+    // 경로 그리기
+    function drawPath(data){
+      var new_polyLine = [];
+		  var pointArray = [];
+      // 지도위에 선은 다 지우기
+      var routeData = data;
+      // var resultStr = "";//
+      // var distance = 0;//
+      // var idx = 1;//
+      var newData = [];
+      var equalData = [];
+      var pointId1 = "-1234567";
+      var ar_line = [];
+
+      for (var i = 0; i < data.features.length; i++) {
+        var feature = data.features[i];
+        //배열에 경로 좌표 저장
+        if(feature.geometry.type == "LineString"){
+          ar_line = [];
+          for (var j = 0; j < feature.geometry.coordinates.length; j++) {
+            var startPt = new Tmapv2.LatLng(feature.geometry.coordinates[j][1],feature.geometry.coordinates[j][0]);
+            ar_line.push(startPt);
+            pointArray.push(feature.geometry.coordinates[j]);
+          }
+          // 라인그리기
+          var polyline = new Tmapv2.Polyline({
+            path: ar_line,
+            strokeColor: "#0000ff", 
+            strokeWeight: 6,
+            strokeStyle: "solid",
+            outline: true,
+            map: map
+          });
+          new_polyLine.push(polyline);
+        }
+        // var pointId2 = feature.properties.viaPointId;
+        // if (pointId1 != pointId2) {
+        //   equalData = [];
+        //   equalData.push(feature);
+        //   newData.push(equalData);
+        //   pointId1 = pointId2;
+        // }
+        // else {
+        //   equalData.push(feature);
+        // }
+      }
+    }
