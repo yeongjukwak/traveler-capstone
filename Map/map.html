@@ -7,6 +7,7 @@
   <title>Map Path</title>
   <link rel="stylesheet" type="text/css" href="../web_test/main.css">
   <link rel="stylesheet" type="text/css" href="./map.css">
+  <link rel="stylesheet" type="text/css" href="./popUp.css">
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey="></script>
@@ -56,6 +57,7 @@
 
     // 마커 생성 (최대 5개)
     var markers = new Array(5);
+    var popUps = [];
     function setMarker(ckbox_id_number){
       var check = $("input:checkbox[id='ckbox" + ckbox_id_number + "']").is(":checked");
       //var data = trip_response[ckbox_id_number];
@@ -73,7 +75,7 @@
       }
 
       // checkBox == true
-      if(check){
+      if(check == true){
         // 마커가 최대로 생성될 경우 처리
         if(markers[markers.length-1] != null){
           alert("여행지는 최대 "+ markers.length +"개까지 선택 가능합니다.");
@@ -87,7 +89,47 @@
 					icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_p.png",
 					map : map,
 					title : title
+          //visible:
 				});
+
+        // 팝업 content
+        var content = "<div class='m-pop'>"+
+					              "<div class='img-box'></div>"+
+					              "<div class='info-box'>"+
+					                "<p class='p-info'>"+
+					                  "<span class='tit'>" + title + "</span>"+
+					                  "<a href='http://tmapapi.sktelecom.com/' target='_blank' class='link'>홈페이지</a>"+
+					                "</p>"+
+					                "<ul class='ul-info'>"+
+				              	    "<li class='li-addr'>"+
+					                    "<p class='new-addr'>서울특별시 중구 을지로 65</p>"+
+					                    "<p class='old-addr'>(우)04539 (지번)을지로 2가 11</p>"+
+					                  "</li>"+
+					                  "<li class='li-tell'>"+
+					                    "<span class='tell'>1588-8787</span>"+
+					                  "</li>"+
+					                "</ul>"+
+					              "</div>"+
+					              "<a href='javascript:void(0)' onclick='onClose(" + ckbox_id_number + ")' class='btn-close'></a>"+
+					            "</div>";
+
+        //마커에 클릭이벤트 등록
+        marker.addListener("click", function(event) {
+          // 중복 제거
+          if(popUps[ckbox_id_number] != null){
+            onClose(ckbox_id_number);
+          }
+          //Popup 객체 생성.
+          var infoWindow = new Tmapv2.InfoWindow({
+            position: new Tmapv2.LatLng(marker._marker_data.options.position._lat, marker._marker_data.options.position._lng),
+            content: content, //Popup 표시될 text
+            type: 2, //Popup의 type 설정.
+            map: map
+          });
+          popUps[ckbox_id_number] = infoWindow;
+        });
+
+        
         for(var i=0; i<markers.length; i++){
           if(markers[i] == null){
             markers[i] = marker;
@@ -102,6 +144,9 @@
           // 삭제할 마커를 찾은 경우
           if(markers[i]._marker_data.options.title == title){
             markers[i].setMap(null);
+            if(popUps[ckbox_id_number] != null){
+              onClose(ckbox_id_number);
+            }
             // 마지막 마커를 삭제하는 경우
             if(i == markers.length-1){
               markers[i] = null;
@@ -114,13 +159,16 @@
                   markers[j+1] = null;
                 }
               }
-              break;
             }
           }
         }
       }
     }
-    
+
+    //닫기 아이콘 클릭시 호출되는 함수.
+    function onClose(popup){
+	    popUps[popup].setVisible(false);
+    }
 
     // 경로탐색
     //var path_response;
