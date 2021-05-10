@@ -1,283 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Map</title>
-  <link rel="stylesheet" type="text/css" href="../web_test/main.css">
-  <link rel="stylesheet" type="text/css" href="./map.css">
-  <link rel="stylesheet" type="text/css" href="./popup.css">
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey="></script>
-  <script>
-    let map; // 지도
-    let markers = []; // 마커
-    let markerInOrder = []; // 선택한 여행지 순서로 된 마커 좌표값
-    let popup = []; // 팝업
-    // 경로
-    let new_polyLine = [];
-		let pointArray = [];
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map</title>
+    <link rel="stylesheet" type="text/css" href="../web_test/main.css">
+    <link rel="stylesheet" type="text/css" href="./map.css">
+    <link rel="stylesheet" type="text/css" href="./popup.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey="></script>
+    <script type="text/javascript" src="trip_list.js"></script>
+    <script type="text/javascript" src="marker.js"></script>
+    <script type="text/javascript" src="path.js"></script>
+    <script>
+        let map;
+        let markers = []; // 마커
+        let markerInOrder = []; // 선택한 여행지 순서로 된 마커 좌표값
+        let popup = []; // 팝업
+        let new_polyLine = [];
+        let pointArray = [];
+        let routeCheck = false; // 경로표시 여부 T/F
 
-    // 지도 생성하기
-    function initMap(){
-      map = new Tmapv2.Map("map_div", {
-				center : new Tmapv2.LatLng(37.88728485257855, 127.73813767661932),
-				zoom : 15,
-				zoomControl: false,
-				scrollwheel: true
-			});
-
-      // 여행지 데이터 가져오기 (map_data.json)
-      $.ajax({
-        url : "trip_data.json",
-        type : "GET",
-        dataType : "json",
-        success: function(response){
-          const trip_data = response.data;
-
-          tripList(trip_data); // 여행지 리스트 생성하기
-          createMarker(trip_data); // 마커 생성하기
-        },
-        error: function(error){
-          alert("여행지 리스트를 불러오지 못 했습니다.");
-        }
-      });
-    }
-
-    // 여행지 리스트 생성하기
-    function tripList(trip_data){
-      let data;
-
-      for(var i=0; i<trip_data.length; i++){
-        data = trip_data[i];
-
-        $("#list").append("<hr><div class='container_list_el'>" +
-                            "<img src='" + data.image + "'>" +
-                            "<div class='container_list_el_name'>" +
-                              "<span class='container_list_el_name_check'>" +
-                                "<input type='checkbox' id='ckbox" + i + "' onclick='checkBoxMarker("+ i +")'>" +
-                              "</span>" +
-                              "<span>" + data.spot + "</span>" +
-                              "<p>" + data.description + "</p>" +
-                            "</div>" +
-                          "</div>");
-      }
-    }
-
-    // 마커 생성하기
-    function createMarker(trip_data){
-      let marker, data;
-
-      for(var i=0; i<trip_data.length; i++){
-        data = trip_data[i];
-
-        marker = new Tmapv2.Marker({
-          position : new Tmapv2.LatLng(data.y, data.x),
-					icon : "",//"http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_p.png", // 마커 이미지 따로 제작?
-					map : map,
-					title : data.spot,
-          visible: false
-          //label: "<div class='marker_label'></div>"
-        });
-
-        createPopup(marker, data, i); //팝업 생성하기
-        markers.push(marker);
-      }
-    }
-
-    // 팝업 생성하기
-    function createPopup(createMarker_marker, createMarker_data, n){
-      const data = createMarker_data;
-      const marker = createMarker_marker;
-      let content = "<div class='m-pop'>"+
-                      "<div class='img-box' style='background-image:url(" + data.image + ")'></div>"+
-                      "<div class='info-box'>"+
-                        "<p class='p-info'>"+
-                          "<span class='tit'>" + data.spot + "</span>"+
-                          "<a href='"+ data.viewUrl +"' target='_blank' class='link'><img src='image/popup/3d-view.svg' alt='3D뷰'> View</a>"+
-                        "</p>"+
-                        "<ul class='ul-info'>"+
-                          "<li class='li-addr'>"+
-                            "<p class='new-addr'>" + data.new_addr + "</p>"+
-                            "<p class='old-addr'>" + data.old_addr + "</p>"+
-                          "</li>"+
-                          "<li class='li-tell'>"+
-                            "<span class='tell'>" + data.tell + "</span>"+
-                          "</li>"+
-                        "</ul>"+
-                      "</div>"+
-                      "<a href='javascript:void(0)' onclick='popupClose(" + n + ")' class='btn-close'></a>"+
-                    "</div>";
-
-      //마커에 클릭이벤트 등록
-      let infoWindow;
-      marker.addListener("click", function(event) {
-        
-        // 중복 제거
-        if(popup[n] != null){
-          popupClose(n);
-        }
-
-        //Popup 객체 생성.
-        infoWindow = new Tmapv2.InfoWindow({
-          position: new Tmapv2.LatLng(data.y, data.x),
-          content: content, //Popup 표시될 text
-          type: 2, //Popup의 type 설정.
-          map: map
-        });
-
-        $('.m-pop').parent().css("border", "none");
-        $('.m-pop').parent().css("background", "none");
-
-        popup[n] = infoWindow;
-      });
-    }
-
-    // 팝업 닫기
-    function popupClose(n){
-	    popup[n].setVisible(false);
-    }
-
-    // checkBox 마커 찍기
-    function checkBoxMarker(id_number){
-      const check = $("input:checkbox[id='ckbox" + id_number + "']").is(":checked");
-      let marker = markers[id_number];
-      let title = marker._marker_data.options.title;
-      
-      if(check == true){ // 체크박스 true
-        let x = marker._marker_data.options.position._lng;
-        let y = marker._marker_data.options.position._lat;
-        
-        marker.setVisible(true);
-        marker.setIcon("image/marker/" + (markerInOrder.length+1) + ".svg");
-        markerInOrder.push(marker);
-
-        //markerInOrder.push([title, y, x]);
-      }
-      else{ // 체크박스 false
-        // markerInOrder 삭제
-        for(var i=0; i<markerInOrder.length; i++){
-          if(title == markerInOrder[i]._marker_data.options.title){ //markerInOrder[i][0]
-            markerInOrder.splice(i, 1);
-          }
-        }
-
-        // 레이블 순서 재설정
-        for(var i=0; i<markerInOrder.length; i++){
-          markerInOrder[i].setIcon("image/marker/" + (i+1) + ".svg");
-        }
-
-        if(popup[id_number] != null){
-          popupClose(id_number);
-        }
-
-        marker.setVisible(false);
-      }
-    }
-
-    // 경로탐색
-    //var path_response;
-    let headers = {};
-    headers["appKey"]= "";
-    function path(){
-      const data = markerInOrder;
-      let startX = data[0]._marker_data.options.position._lng;//data[0][2];
-      let startY = data[0]._marker_data.options.position._lat;//data[0][1];
-      let endX = data[data.length-1]._marker_data.options.position._lng;//[2];
-      let endY = data[data.length-1]._marker_data.options.position._lat;//[1];
-      let passList = "";
-      for(var i=1; i<data.length-1; i++){
-				if(passList != "")
-					passList += "_"; 	
-        passList += data[i]._marker_data.options.position._lng + "," + data[i]._marker_data.options.position._lat;
-				//passList += data[i][2] + "," + data[i][1];
-			}
-      $.ajax({
-        method: "POST", 
-        headers: headers, 
-        url: "https://apis.openapi.sk.com/tmap/routes?version=1&format=json",
-        async: false,
-        data: {
-          startX: startX,
-          startY: startY,
-          endX: endX,
-          endY: endY,
-          passList: passList,
-          reqCoordType : "WGS84GEO",
-					resCoordType : "WGS84GEO",
-          searchOption : "0",
-					trafficInfo : "Y" // 교통정보 표시
-        },
-        success: function(response){
-          //path_response = response;
-          drawPath(response);
-        },
-        error: function(error){
-          alert("여행 경로를 불러오지 못 했습니다.");
-        }
-      });
-    }
-
-    // 경로 그리기
-    function drawPath(data){
+        $(document).ready(function(){
      
-      // for(var i=0; i<markerInOrder.length; i++){
-      //   if(markerInOrder[i][0] == markers[i]._marker_data.options.title)
-      //   markers[i].setLabel("<span style='width: 24px; height: 38px background-color: red;color:white'>ss</span>");
-      // }
-      // 지도위에 선은 다 지우기
-      const routeData = data;
-      let ar_line = [];
-      let feature;
-      let startPt;
-      let polyline;
-      // var resultStr = "";//
-      // var distance = 0;//
-      // var idx = 1;//
-      // var newData = [];
-      // var equalData = [];
-      // var pointId1 = "-1234567";
-      
 
-      
-      for (var i = 0; i < routeData.features.length; i++) {
-        feature = routeData.features[i];
-        //배열에 경로 좌표 저장
-        if(feature.geometry.type == "LineString"){
-          ar_line = [];
-          for (var j = 0; j < feature.geometry.coordinates.length; j++) {
-            startPt = new Tmapv2.LatLng(feature.geometry.coordinates[j][1],feature.geometry.coordinates[j][0]);
-            ar_line.push(startPt);
-            pointArray.push(feature.geometry.coordinates[j]);
-          }
-          // 라인그리기
-          polyline = new Tmapv2.Polyline({
-            path: ar_line,
-            strokeColor: "red", 
-            strokeWeight: 6,
-            strokeStyle: "solid",
-            outline: true,
-            map: map
+            // 맵 생성
+            map = new Tmapv2.Map("map_div", {
+                center : new Tmapv2.LatLng(37.88728485257855, 127.73813767661932),
+                zoom : 15,
+                zoomControl: false,
+                scrollwheel: true
+            });
+
+            // 여행 데이터 불러오기
+            $.ajax({
+                url : "trip_data.json",
+                type : "GET",
+                dataType : "json",
+                success: function(response){
+                    const trip_data = response.data;
+
+                    tripList(trip_data); // 여행지 리스트 생성하기
+                    createMarker(trip_data); // 마커 생성하기
+                },
+                error: function(error){
+                    alert("여행지 데이터를 불러오지 못 했습니다.");
+                }
+            });
+        });
+
+        // 구현중
+        function search(){
+          
+
+          $.ajax({
+                url : "trip_data.json",
+                type : "GET",
+                dataType : "json",
+                success: function(response){
+                    const trip_data = response.data;
+
+                    searchCheck(trip_data);
+                },
+                error: function(error){
+                    alert("여행지 데이터를 불러오지 못 했습니다.");
+                }
           });
-          new_polyLine.push(polyline);
         }
-        // var pointId2 = feature.properties.viaPointId;
-        // if (pointId1 != pointId2) {
-        //   equalData = [];
-        //   equalData.push(feature);
-        //   newData.push(equalData);
-        //   pointId1 = pointId2;
-        // }
-        // else {
-        //   equalData.push(feature);
-        // }
-      }
-    }
-  </script>
+        
+        function searchCheck(data){
+          const t_data = data;
+          let v = document.getElementById("searchValue").value;
+          let varr = [];
+
+          for(let i=0; i<t_data.length; i++){
+            let t = t_data[i];
+            if(v === t.spot){
+              alert(t.description);
+              break;
+            }  
+          }
+        }
+    </script>
 </head>
-<body onload="initMap()">
+<body>
   <header>
     <div class="wrapper">
       <h1> LOGO </h1>
@@ -291,14 +99,23 @@
   <section>
     <div class="container">
       <div class="container_title">
-        <span><span id="container_area">(선택한 여행지)</span>의 추천 관광지를 찾아봤어요</span>
+        <!-- <span><span id="container_area">(선택한 여행지)</span>의 추천 관광지를 찾아봤어요</span> -->
+        <span class="search">
+          <input type="text" id="searchValue">
+          <input type="button" value="검색" onclick="search()">
+        </span>
+        <!-- 수정 ↓ : <input type="button" value="경로 찾기"> -->
         <input type="button" id="draw_path" value="경로 안내" onclick="path()">
       </div>
       <div class="container_box">
+        
         <!-- 여행지 list -->
         <div class="container_list" id="list"></div>
+        <!-- 수정 : 관광지 리스트 html를 javascript에서 동적으로 생성 (tripList 함수 참고) -->
+        
         <!-- 지도 -->
         <div class="container_map">
+          <!-- 수정 ↓ : <img src="http://placehold.it/900x900"> -->
           <div id="map_div"></div>
         </div>
       </div>
@@ -306,17 +123,14 @@
   </section>
   <footer>
     <div class="footer">
+      <!-- 수정 ↓ : <p>copyright</p> -->
+      <!-- 마커, 팝업 아이콘 출처 -->
       <div>
-        <p>copyright</p>
-        <div>
-          popup Icons made by
-          <a href="https://www.freepik.com" title="Freepik">Freepik</a>
-          from
-          <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-        </div>
-        <div>marker Icons made by <a href="https://www.flaticon.com/authors/vectors-market" title="Vectors Market">Vectors Market</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+        [popup Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a>
+        / marker Icons made by <a href="https://www.flaticon.com/authors/vectors-market" title="Vectors Market">Vectors Market</a>]
+        from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
       </div>
     </div>
-</footer>
+  </footer>
 </body>
 </html>
