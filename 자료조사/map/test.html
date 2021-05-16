@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<title>Map Path</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey="></script>
+	<script>
+		var map, marker;
+		var new_polyLine = [];
+		var pointArray = [];
+		var trip_data = [ // 여행지 데이터
+			{
+				icon: 'S',
+				title: "한림대학교",
+				lonlat: new Tmapv2.LatLng(37.883398747215494, 127.73791416936132)
+			},
+			{
+				icon: 'P',
+				title: "조각공원",
+				lonlat: new Tmapv2.LatLng(37.87362787826356, 127.7127356336596)
+			},
+			{
+				icon: 'P',
+				title: "스카이워크",
+				lonlat: new Tmapv2.LatLng(37.8930945864375, 127.72383146010827)
+			},
+			{
+				icon: 'E',
+				title: "소양강댐",
+				lonlat: new Tmapv2.LatLng(37.93790474873468, 127.80192826024657)
+			}
+		];
+
+		// 지도 생성 (onload)
+		function initMap(){
+			map = new Tmapv2.Map("map_div", {
+				center : new Tmapv2.LatLng(37.88728485257855, 127.73813767661932), // 지도 초기 좌표
+				zoom : 13,
+				width : "600px",
+				height : "500px",
+				zoomControl: false,
+				scrollwheel: true
+			});	
+
+			// 마커 이미지 설정
+			for(var i=0; i<trip_data.length; i++){
+				var icon = trip_data[i].icon;
+
+				if(icon == 'S')
+					trip_data[i].icon = "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png";
+				else if(icon == 'E')
+					trip_data[i].icon = "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png";
+				else
+					trip_data[i].icon = "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_p.png";
+			}
+
+			// 마커 생성하기
+			for(var i=0; i<trip_data.length; i++){
+				var lonlat = trip_data[i].lonlat;
+				var title = trip_data[i].title;
+				var icon = trip_data[i].icon;
+
+				marker = new Tmapv2.Marker({
+					position : lonlat,
+					icon : icon,
+					map : map,
+					title : title
+				});
+			}
+
+			// 경로탐색 API 사용요청
+			var passList = "";
+			for(var i=1; i<trip_data.length-1; i++){
+				if(passList != "")
+					passList += "_"; 	
+				passList += trip_data[i].lonlat._lng + "," + trip_data[i].lonlat._lat;
+			}
+			var prtcl;
+			var headers = {};
+			headers["appKey"]= "";
+			$.ajax({
+				method: "POST", 
+				headers: headers, 
+				url: "https://apis.openapi.sk.com/tmap/routes?version=1&format=json",
+				async: false,
+				data: {
+					startX : trip_data[0].lonlat._lng,
+					startY : trip_data[0].lonlat._lat,
+					endX : trip_data[trip_data.length-1].lonlat._lng,
+					endY : trip_data[trip_data.length-1].lonlat._lat,
+					passList : passList,
+					reqCoordType : "WGS84GEO",
+					resCoordType : "WGS84GEO",
+					angle : "172",
+					searchOption : "0",
+					trafficInfo : "Y"
+				},
+				success: function(response){
+					prtcl = response;
+
+					//경로탐색 결과 라인 그리기
+					// var trafficColors = {
+					// 	extractStyles:true,
+					// 	/* 실제 교통정보가 표출되면 아래와 같은 Color로 Line이 생성됩니다. */
+					// 	trafficDefaultColor:"#636f63", //Default
+					// 	trafficType1Color:"#19b95f", //원할
+					// 	trafficType2Color:"#f15426", //지체
+					// 	trafficType3Color:"#ff970e"  //정체		
+					// };  
+
+					// var style_red = {
+					// 	fillColor:"#FF0000",
+					// 	fillOpacity:0.2,
+					// 	strokeColor: "#FF0000",
+					// 	strokeWidth: 3,
+					// 	strokeDashstyle: "solid",
+					// 	pointRadius: 2,
+					// 	title: "this is a red line"
+					// };
+
+					drawData(prtcl);
+				}
+				// error:function(request,status,error){
+				// console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				// }
+			});
+
+			function drawData(data){
+				// 지도위에 선은 다 지우기
+				routeData = data;
+				//var resultStr = "";
+				//var distance = 0;
+				//var idx = 1;
+				var newData = [];
+				var equalData = [];
+				var pointId1 = "-1234567";
+				var ar_line = [];
+				
+				for (var i = 0; i < data.features.length; i++) {
+					var feature = data.features[i];
+					//배열에 경로 좌표 저장
+					if(feature.geometry.type == "LineString"){
+						ar_line = [];
+						for (var j = 0; j < feature.geometry.coordinates.length; j++) {
+							var startPt = new Tmapv2.LatLng(feature.geometry.coordinates[j][1],feature.geometry.coordinates[j][0]);
+							ar_line.push(startPt);
+							pointArray.push(feature.geometry.coordinates[j]);
+						}
+						var polyline = new Tmapv2.Polyline({
+							path: ar_line,
+							strokeColor: "#0000ff", 
+							strokeWeight: 6,
+							strokeStyle: "solid",
+							outline: true,
+							map: map
+						});
+						new_polyLine.push(polyline);
+					}
+					var pointId2 = feature.properties.viaPointId;
+					if (pointId1 != pointId2) {
+						equalData = [];
+						equalData.push(feature);
+						newData.push(equalData);
+						pointId1 = pointId2;
+					}
+					else {
+						equalData.push(feature);
+					}
+				}
+			}
+		}
+	</script>
+</head>
+<body onload="initMap()">
+	<div id="map_div"></div>
+</body>
+</html>
