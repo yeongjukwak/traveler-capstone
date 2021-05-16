@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+  <link rel="stylesheet" type="text/css" href="./resources/css/main.css">
+  <link rel="stylesheet" type="text/css" href="./resources/css/map.css">
+  <link rel="stylesheet" type="text/css" href="./resources/css/popup.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxf9565457f2b4447191f7d70c4c1790b4"></script>
+  
+  <script>
+    let markerInOrder = []; // 선택한 여행지 순서로 된 마커 좌표값
+    let new_polyLine = [];
+    let pointArray = [];
+    let routeCheck = false; // 경로표시 여부 T/F
+
+    let map;
+    let markers = [];
+    let popups = [];
+    $(document).ready(function(){
+      map = new Tmapv2.Map("map_div", {
+        center : new Tmapv2.LatLng(37.88728485257855, 127.73813767661932),
+        zoom : 15,
+        zoomControl: false,
+        scrollwheel: true
+      });
+    });  
+  </script>
+  
+  <script type="text/javascript" src="./resources/js/search.js"></script>
+  <script type="text/javascript" src="./resources/js/myLocation.js"></script>
+  <script type="text/javascript" src="./resources/js/bicycle_road.js"></script>
+  <script type="text/javascript" src="./resources/js/bus_road.js"></script>
+  <script type="text/javascript" src="./resources/js/check.js"></script>
+
+  <!-- <script type="text/javascript" src="./resources/js/trip_list.js"></script> -->
+  <script type="text/javascript" src="./resources/js/marker.js"></script>
+  <script type="text/javascript" src="./resources/js/path.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrapper">
+      <h1> LOGO </h1>
+      <!--<img src="LOGO.png" width="5%", height="5%"> -->
+      <ul class="menu">
+        <li><a href="#">이달의 추천 여행지</a></li>
+        <li><a href="#">나의 루트</a></li>
+      </ul>
+    </div>
+  </header>
+  <section>
+    <div class="container">
+      <div class="container_title">
+        <!-- <span><span id="container_area">(선택한 여행지)</span>의 추천 관광지를 찾아봤어요</span> -->
+        <span class="search">
+          <input type="text" id="search"> <!-- ========================================================= -->
+          <!-- <input type="button" id="search" value="검색">  onclick="initMap()" -->
+          <input type="button" id="bus" value="자전거 경로">
+        </span>
+        <!-- 수정 ↓ : <input type="button" value="경로 찾기"> -->
+        <input type="button" id="draw_path" value="경로 안내" onclick="path()">
+      </div>
+      <div class="container_box">
+        
+        <!-- 여행지 list -->
+        <div class="container_list" id="list"></div>
+        <!-- 수정 : 관광지 리스트 html를 javascript에서 동적으로 생성 (tripList 함수 참고) -->
+        
+        <!-- 지도 -->
+        <div class="container_map">
+          <!-- 수정 ↓ : <img src="http://placehold.it/900x900"> -->
+          <div id="map_div"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer">
+      <!-- 수정 ↓ : <p>copyright</p> -->
+      <!-- 마커, 팝업 아이콘 출처 -->
+      <div>
+        [popup Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a>
+        / marker Icons made by <a href="https://www.flaticon.com/authors/vectors-market" title="Vectors Market">Vectors Market</a>]
+        from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
