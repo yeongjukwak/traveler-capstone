@@ -77,21 +77,20 @@
       }
       .container_list_el {
         display: inline-block;
-        
       }
       .container_list_el img{
         float: left;
         width: 30%;
       }
-      .container_list_el .container_list_el_name{
+      .container_list_el_name{
         padding-left: 1em;
         padding-top: 0.7em;
         float: left;
       }
-      .container_list_el .container_list_el_name span{
+      .container_list_el_name span{
         font-size: 20px;
       }
-      .container_list_el .container_list_el_name .container_list_el_name_check input{
+      .container_list_el_name .container_list_el_name_check input{
         display: inline-block;
         width: 20px;
         height: 20px;
