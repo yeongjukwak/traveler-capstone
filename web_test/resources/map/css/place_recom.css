@@ -1,0 +1,129 @@
+*{
+  margin:0;
+  padding:0;
+}
+.clearfix{
+  content:'';
+  display:block;
+  clear:both;
+
+}
+
+#logo{
+  font-size: 50px;
+}
+.search_i {
+  text-align: center;
+  font-size: 10px;
+  width: 13vw;
+  padding-right: 50px;
+  margin: 0.5vw;
+  margin-left: 2vw;
+  border: 1px solid;
+  border-radius: 10em;
+  background-color: white;
+}
+.search_i input{
+  width: 10vw;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px;
+  padding-left: 5px;
+  display: inline;
+  box-sizing: border-box;
+  border: none;
+  outline-style: none;
+}
+
+.search_i img{
+  float: left;
+  position: absolute;
+  width: 2.5em;
+  height: 2.5em;
+  margin-top: 7px;
+  margin-left: 3em;
+}
+
+/*------------------------------------*/
+      .container {
+        width: 100vw;
+        height: 100vh;
+      }
+      .container_box{
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+      }
+      
+      .container_list{
+        float: left;
+        width: 20%;
+        height: 100%;
+      }
+      .container_main{
+        width: 100%;
+        height: 22vh;
+        background-color: #49868C;
+      }
+      .select_check{
+        margin-left: 60%;
+      }
+      .select_check button{
+        font-size: 20px;
+      }
+      .container_list_box{
+        height: 63vh;
+        background-color: #c1dfe2;
+      }
+      .container_list_el {
+        display: inline-block;
+        
+      }
+      .container_list_el img{
+        float: left;
+        width: 30%;
+      }
+      .container_list_el .container_list_el_name{
+        padding-left: 1em;
+        padding-top: 0.7em;
+        float: left;
+      }
+      .container_list_el .container_list_el_name span{
+        font-size: 20px;
+      }
+      .container_list_el .container_list_el_name .container_list_el_name_check input{
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #bcbcbc;
+        cursor: pointer;
+      } 
+      .container_select{
+        height: 15vh;
+        background-color: #A0D9D9;
+      }
+      .container_select p{
+        padding-left: 30%;
+        font-size: 20px;
+      }
+      .container_select button{
+        margin-left: 13px;
+        margin-top: 3%;
+        width: 27%;
+      }
+      .container_sel_img{
+        width: 25px;
+      }
+      
+      .container_box .container_map img{
+        width: 80%;
+        height: 85vh;
+        float: left;
+      }
+      .container_route{
+        float: left;
+        background-color: #A0D9D9;
+        width: 80%;
+        height: 15%;
+        
+      }
