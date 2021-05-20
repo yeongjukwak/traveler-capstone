@@ -5,7 +5,7 @@ $(document).ready(function(){
   $("#search").val(searchValue);
   
   $.ajax({
-    url : "./resources/json/trip_data.json",
+    url : "./resources/map/json/trip_data.json",
     type : "GET",
     dataType : "json",
     success: function(response){
@@ -19,7 +19,7 @@ $(document).ready(function(){
   // 검색어 자동완성으로 여행지 리스트 생성
   $("#search").keyup(function(){
     $.ajax({
-      url : "./resources/json/trip_data.json",
+      url : "./resources/map/json/trip_data.json",
       type : "GET",
       dataType : "json",
       success: function(response){
@@ -64,3 +64,4 @@ $(document).ready(function(){
     }
   }
 });
+

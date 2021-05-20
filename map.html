@@ -6,21 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Map</title>
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-  <link rel="stylesheet" type="text/css" href="./resources/css/main.css">
-  <link rel="stylesheet" type="text/css" href="./resources/css/map.css">
-  <link rel="stylesheet" type="text/css" href="./resources/css/popup.css">
+  <link rel="stylesheet" type="text/css" href="./resources/map/css/main.css">
+  <link rel="stylesheet" type="text/css" href="./resources/map/css/map.css">
+  <link rel="stylesheet" type="text/css" href="./resources/map/css/popup.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxf9565457f2b4447191f7d70c4c1790b4"></script>
   
   <script>
-    let markerInOrder = []; // 선택한 여행지 순서로 된 마커 좌표값
-    let new_polyLine = [];
-    let pointArray = [];
-    let routeCheck = false; // 경로표시 여부 T/F
+    let pointArray = []; // ??
 
     let map;
     let markers = [];
     let popups = [];
+    let new_polyLine = [];
     $(document).ready(function(){
       map = new Tmapv2.Map("map_div", {
         center : new Tmapv2.LatLng(37.88728485257855, 127.73813767661932),
@@ -31,15 +29,14 @@
     });  
   </script>
   
-  <script type="text/javascript" src="./resources/js/search.js"></script>
-  <script type="text/javascript" src="./resources/js/myLocation.js"></script>
-  <script type="text/javascript" src="./resources/js/bicycle_road.js"></script>
-  <script type="text/javascript" src="./resources/js/bus_road.js"></script>
-  <script type="text/javascript" src="./resources/js/check.js"></script>
-
-  <!-- <script type="text/javascript" src="./resources/js/trip_list.js"></script> -->
-  <script type="text/javascript" src="./resources/js/marker.js"></script>
-  <script type="text/javascript" src="./resources/js/path.js"></script>
+  <script type="text/javascript" src="./resources/map/js/test.js"></script>
+  <script type="text/javascript" src="./resources/map/js/search.js"></script>
+  <script type="text/javascript" src="./resources/map/js/myLocation.js"></script>
+  <script type="text/javascript" src="./resources/map/js/bicycle_road.js"></script>
+  <script type="text/javascript" src="./resources/map/js/bus_road.js"></script>
+  <script type="text/javascript" src="./resources/map/js/check.js"></script>
+  <script type="text/javascript" src="./resources/map/js/p.js"></script>
+  
 </head>
 <body>
   <header>
@@ -59,15 +56,16 @@
         <span class="search">
           <input type="text" id="search"> <!-- ========================================================= -->
           <!-- <input type="button" id="search" value="검색">  onclick="initMap()" -->
-          <input type="button" id="bus" value="자전거 경로">
+          <input type="button" id="ctl" value="체크여행리스트">
         </span>
         <!-- 수정 ↓ : <input type="button" value="경로 찾기"> -->
-        <input type="button" id="draw_path" value="경로 안내" onclick="path()">
+        <input type="button" id="draw_path" value="경로 안내">
       </div>
       <div class="container_box">
         
         <!-- 여행지 list -->
         <div class="container_list" id="list"></div>
+        <div class="container_list" id="triplist" style="display: none;"></div>
         <!-- 수정 : 관광지 리스트 html를 javascript에서 동적으로 생성 (tripList 함수 참고) -->
         
         <!-- 지도 -->

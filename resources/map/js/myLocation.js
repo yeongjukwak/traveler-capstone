@@ -11,7 +11,7 @@ $(document).ready(function(){
 
       marker = new Tmapv2.Marker({
         position : my_location,
-        icon : "./resources/images/marker/locationPin.svg",
+        icon : "./resources/map/images/marker/locationPin.svg",
         iconSize : new Tmapv2.Size(30, 30),
         map : map
       });
@@ -26,7 +26,7 @@ $(document).ready(function(){
 
     marker = new Tmapv2.Marker({
       position : map.getCenter(),
-      icon : "./resources/images/marker/locationPin.svg",
+      icon : "./resources/map/images/marker/locationPin.svg",
       iconSize : new Tmapv2.Size(30, 30),
       map : map
     });
