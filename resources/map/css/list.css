@@ -1,0 +1,147 @@
+*{
+  margin:0;
+  padding:0;
+}
+.clearfix{
+  content:'';
+  display:block;
+  clear:both;
+}
+
+#logo{
+  font-size: 50px;
+}
+#logo:hover{
+  cursor: pointer;
+}
+
+li{ list-style-type: none; }
+a{ text-decoration: none; }
+
+.search_i {
+  text-align: center;
+  font-size: 10px;
+  width: 17vw;
+  padding-right: 50px;
+  margin: 0.5vw;
+  margin-left: 2vw;
+  border: 2px solid #168BF2;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.search_i input{
+  width: 16vw;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px;
+  padding-left: 5px;
+  display: inline;
+  box-sizing: border-box;
+  border: none;
+  outline-style: none;
+}
+.search_i img{
+  float: left;
+  position: absolute;
+  width: 2.5em;
+  height: 2.5em;
+  margin-top: 7px;
+  margin-left: 2em;
+}
+.search_i img:hover{
+  cursor: pointer;
+}
+
+.auto_search_output{
+  top: 15vh;
+  left: 2.05vw;
+  position: absolute;
+  width: 20.2vw;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 0 0 5px 5px;
+  display: none;
+}
+.auto_search_output li{
+  padding: 8px 0;
+  list-style-type: none;
+}
+.auto_search_output li:hover{
+  cursor: pointer;
+  background-color: lightgray;
+}
+.auto_search_output li img{
+  width: 2.5vw;
+  height: 2.5vh;
+}
+.auto_search_output li div{
+  display: inline-block;
+}
+
+/*------------------------------------*/
+      .container {
+        width: 100vw;
+        height: 100vh;
+      }
+      .container_box{
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+      }
+      .container_list{
+        float: left;
+        width: 25%;
+        height: 100%;
+      }
+      .container_main{
+        position: relative;
+        width: 100%;
+        height: 17vh;
+        background-color: #fff;
+      }
+      .container_list_box{
+        height: 76vh;
+        background-color: #fff;
+        overflow: auto;
+      }
+      .container_trip_list{
+        margin: 0 5px;
+      }
+      .container_list_li{
+        list-style-type: none;
+        border-bottom: solid 1px lightgray;
+      }
+      .container_list_li:hover{
+        cursor: pointer;
+        background-color: lightgray;
+      }
+      .container_list_li img{
+        margin: 5px 0 0 5px;
+        width: 20%;
+      }
+      .container_list_li_name{
+        padding-left: 20px;
+        display: inline-block;
+      }
+      .container_list_li_name p:first-child{
+        font-size: 20px;
+      }
+      .container_select{
+        height: 7vh;
+        background-color: #fff;
+      }
+      .container_select p{
+        padding-left: 30%;
+        font-size: 20px;
+      }
+      .container_select button{
+        margin-left: 13px;
+        margin-top: 3%;
+        width: 27%;
+      }
+      .container_select button:hover{
+        cursor: pointer;
+      }
+      .container_sel_img{
+        width: 25px;
+      }
