@@ -4,88 +4,73 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-  <link rel="stylesheet" type="text/css" href="./resources/map/css/main.css">
   <link rel="stylesheet" type="text/css" href="./resources/map/css/map.css">
-  <link rel="stylesheet" type="text/css" href="./resources/map/css/popup.css">
+  <link rel="stylesheet" type="text/css" href="./resources/map/css/list.css">
+  <link rel="stylesheet" type="text/css" href="./resources/map/css/trip_info_box.css">
+  <title>Document</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxf9565457f2b4447191f7d70c4c1790b4"></script>
-  
   <script>
-    let pointArray = []; // ??
-
-    let map;
+    let map, marker;
     let markers = [];
-    let popups = [];
     let new_polyLine = [];
+
+    /* 맵 생성 */
     $(document).ready(function(){
       map = new Tmapv2.Map("map_div", {
-        center : new Tmapv2.LatLng(37.88728485257855, 127.73813767661932),
+        center : new Tmapv2.LatLng(37.8863541, 127.73577569999999),
         zoom : 15,
         zoomControl: false,
         scrollwheel: true
       });
-    });  
+    });
   </script>
-  
-  <script type="text/javascript" src="./resources/map/js/test.js"></script>
+  <script type="text/javascript" src="./resources/map/js/gps.js"></script>
+  <script type="text/javascript" src="./resources/map/js/path.js"></script>
+  <script type="text/javascript" src="./resources/map/js/click.js"></script>
+  <script type="text/javascript" src="./resources/map/js/create.js"></script>
   <script type="text/javascript" src="./resources/map/js/search.js"></script>
-  <script type="text/javascript" src="./resources/map/js/myLocation.js"></script>
-  <script type="text/javascript" src="./resources/map/js/bicycle_road.js"></script>
-  <script type="text/javascript" src="./resources/map/js/bus_road.js"></script>
-  <script type="text/javascript" src="./resources/map/js/check.js"></script>
-  <script type="text/javascript" src="./resources/map/js/p.js"></script>
-  
 </head>
 <body>
-  <header>
-    <div class="wrapper">
-      <h1> LOGO </h1>
-      <!--<img src="LOGO.png" width="5%", height="5%"> -->
-      <ul class="menu">
-        <li><a href="#">이달의 추천 여행지</a></li>
-        <li><a href="#">나의 루트</a></li>
-      </ul>
-    </div>
-  </header>
-  <section>
-    <div class="container">
-      <div class="container_title">
-        <!-- <span><span id="container_area">(선택한 여행지)</span>의 추천 관광지를 찾아봤어요</span> -->
-        <span class="search">
-          <input type="text" id="search"> <!-- ========================================================= -->
-          <!-- <input type="button" id="search" value="검색">  onclick="initMap()" -->
-          <input type="button" id="ctl" value="체크여행리스트">
-        </span>
-        <!-- 수정 ↓ : <input type="button" value="경로 찾기"> -->
-        <input type="button" id="draw_path" value="경로 안내">
-      </div>
-      <div class="container_box">
-        
-        <!-- 여행지 list -->
-        <div class="container_list" id="list"></div>
-        <div class="container_list" id="triplist" style="display: none;"></div>
-        <!-- 수정 : 관광지 리스트 html를 javascript에서 동적으로 생성 (tripList 함수 참고) -->
-        
-        <!-- 지도 -->
-        <div class="container_map">
-          <!-- 수정 ↓ : <img src="http://placehold.it/900x900"> -->
-          <div id="map_div"></div>
+  <div class="container">
+    <div class="container_box">
+      <div class="container_list">
+        <div class="container_main">
+          <span id="logo" onclick="location.href='main.html'"> LOGO </span>
+          <div class="search_i">
+            <input id="search_input" type="text" value="">
+            <img id="search_click" src="resources/map/images/loupe.png">
+          </div>
+          <ul class="auto_search_output">
+            <!-- 검색 자동완성 리스트 -->
+          </ul>
+        </div> 
+        <div class="container_select">
+          <button id="bus"><img class="container_sel_img" src="resources/map/images/path/bus.png"></button>
+          <button id="car"><img class="container_sel_img" src="resources/map/images/path/car.png"></button>
+          <button id="bicycle"><img class="container_sel_img" src="resources/map/images/path/bycicle.png"></button>
+        </div>          
+        <div class="container_list_box">
+            <ul class="container_trip_list">
+              <!-- 여행지 리스트 or 여행지 상세정보 -->
+            </ul>        
         </div>
       </div>
-    </div>
-  </section>
-  <footer>
-    <div class="footer">
-      <!-- 수정 ↓ : <p>copyright</p> -->
-      <!-- 마커, 팝업 아이콘 출처 -->
-      <div>
-        [popup Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a>
-        / marker Icons made by <a href="https://www.flaticon.com/authors/vectors-market" title="Vectors Market">Vectors Market</a>]
-        from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+      <div class="container_map">
+        <div id="map_div">
+          <!-- 지도 영역 -->
+        </div>
+        <ul class="map_menubar">
+          <li id="menu_1">
+            <span>나의 여행지</span>
+            <ul class="menu_1_info">
+              <!-- 나의 여행 리스트 -->
+            </ul>
+          </li>
+        </ul>
+        <p id="path_data">총 거리: - &nbsp;&nbsp;&nbsp; 총 시간: -</p>
       </div>
     </div>
-  </footer>
+  </div>
 </body>
 </html>
