@@ -4,7 +4,7 @@
             "spot" : "공지천조각공원",
             "subDescription" : "-",
             "description" : "도시근린공원",
-            "image" : "http://placehold.it/120x120",
+            "image" : "./resources/map/images/trip_img/조각공원.JPG",
             "x" : "127.71347503775486",
             "y" : "37.87281030885807",
             "viewUrl" : "../index.html",

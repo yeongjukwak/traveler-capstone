@@ -46,6 +46,7 @@ function createTripList(trip_data){
           || tdata.new_addr.indexOf(search_input) > -1
           || tdata.old_addr.indexOf(search_input) > -1){
         $(".container_trip_list").append(`<li class='container_list_li' name="${tdata.spot}">` +
+                                          // `<div class="trip_list_img" style="background-image:url(${tdata.image})"></div>` +
                                           `<img src='${tdata.image}'>` +
                                           `<div class='container_list_li_name'>` +
                                             `<p>${tdata.spot}</p>` +
@@ -73,7 +74,7 @@ function createTripInformation(trip_data, spot){
                                         `<div class="trip_info_box">` +
                                           `<p>${tdata.spot}</p>` +
                                           `<div class='trip_link'><a href='#' class="my_list_add" name='${tdata.spot}'>담기</a></div>` +
-                                          `<div class='trip_link'><a href='${tdata.viewUrl}' target='_blank'>360</a></div>` +
+                                          `<div class='trip_link'><a href='${tdata.viewUrl}' target='_blank'>View</a></div>` +
                                           `<ul class="trip_info">` +
                                             `<li class="trip_info_desc"><p>${tdata.description}</p></li>` +
                                             `<li class="trip_info_addr">` +
@@ -124,7 +125,7 @@ function createAutoSearchTripList(trip_data){
 function createMyTrip(spot){
   $(".menu_1_info").append(`<li class="my_trip_list_li" id="${spot}" name="${spot}">` +
                               `<span class="my_trip_span" name="${spot}">${spot}</span>` +
-                              `<div class='trip_close' name='${spot}'></div>` +
+                              `<div class='trip_close' name='${spot}'>x</div>` +
                             `</li>`);
 }
 

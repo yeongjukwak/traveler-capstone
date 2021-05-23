@@ -56,7 +56,19 @@ $(document).ready(function(){
 
   /* 나의 여행지 리스트에 담기 */
   $(document).on("click", ".my_list_add", function(){
-    
+    if(pathCheck){
+      let c = confirm("현재 경로를 취소하겠습니까?");
+      if(c){
+        for(let i=0; i<markers.length; i++){
+          markers[i].setMap(null);
+        }
+        pathClose();
+        pathCheck = false;  
+      }
+      else{
+        return;
+      }
+    }
 
     createMyTrip($(this).attr("name"));
   });
@@ -87,19 +99,28 @@ $(document).ready(function(){
     }
   });
 
-  /* 자동차 경로 표시 */
-  $(document).on("click", "#car", function(){
-    tripListCheck();
-  });
+  /* 경로 클릭 */
+  $(document).on("click", ".path_button", function(){
+    let id = $(this).attr("id");
 
-  /* 버스 경로 표시 */
-  $(document).on("click", "#bus", function(){
-    pathBus();
-  });
-
-  /* 자전거 경로 표시 */
-  $(document).on("click", "#bicycle", function(){
-    pathBicycle();
+    if(id === "car"){
+      $("#car").css("background-color", "#e6e6e6");
+      $("#bus").css("background-color", "#fbfbfb");
+      $("#bicycle").css("background-color", "#fbfbfb");
+      tripListCheck();
+    }
+    else if(id === "bus"){
+      $("#bus").css("background-color", "#e6e6e6");
+      $("#car").css("background-color", "#fbfbfb");
+      $("#bicycle").css("background-color", "#fbfbfb");
+      pathBus();
+    }
+    else{
+      $("#bicycle").css("background-color", "#e6e6e6");
+      $("#bus").css("background-color", "#fbfbfb");
+      $("#car").css("background-color", "#fbfbfb");
+      pathBicycle();
+    }
   });
 
   /* 검색 돋보기 클릭 */

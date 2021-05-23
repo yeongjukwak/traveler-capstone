@@ -1,6 +1,7 @@
 .trip_box .trip_img_box{
     width: 100%;
     height: 30vh;
+    background-size: 100% 30vh;
 }
 .trip_box .trip_info_box{
     margin: 0 10px;
@@ -14,11 +15,15 @@
 .trip_box .trip_info_box .trip_link{
     display: inline-block;
     margin: 10px 5px;
-    background-color: skyblue;
+    background-color: #168BF2;
     width: 5vw;
     height: 5vh;
     border-radius: 3em;
     text-align: center;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%);
+}
+.trip_box .trip_info_box .trip_link:hover{
+    background-color: #167dd6;
 }
 .trip_box .trip_info_box .trip_link a{
     font-size: 22px;
@@ -27,18 +32,10 @@
     color: white;
 }
 .trip_box .trip_info_box .trip_info li{
+
     list-style-type: none;
     border-top: solid 1px lightgray;
-    padding: 5px 30px;
+    padding: 10px 30px;
     margin-bottom: 5px;
     
-}
-/* .trip_box .trip_info_box .trip_info .trip_info_desc{
-    background: url(../images/popup/phone-call.svg) no-repeat top 3px left;
-} */
-.trip_box .trip_info_box .trip_info .trip_info_addr{
-    background: url(../images/popup/pin.svg) no-repeat top 3px left;
-}
-.trip_box .trip_info_box .trip_info .trip_info_tell{
-    background: url(../images/popup/phone-call.svg) no-repeat top 3px left;
 }
