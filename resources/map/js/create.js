@@ -46,6 +46,7 @@ function createTripList(trip_data){
           || tdata.new_addr.indexOf(search_input) > -1
           || tdata.old_addr.indexOf(search_input) > -1){
         $(".container_trip_list").append(`<li class='container_list_li' name="${tdata.spot}">` +
+                                          //`<div class="trip_list_img" style="background-image:url(${tdata.image})"></div>` +
                                           `<img src='${tdata.image}'>` +
                                           `<div class='container_list_li_name'>` +
                                             `<p>${tdata.spot}</p>` +
@@ -56,7 +57,8 @@ function createTripList(trip_data){
     }
   }
   else{
-    $(".container_trip_list").children().remove();
+    tripListRemove();
+    //$(".container_trip_list").children().remove();
   }
 }
 
@@ -73,7 +75,7 @@ function createTripInformation(trip_data, spot){
                                         `<div class="trip_info_box">` +
                                           `<p>${tdata.spot}</p>` +
                                           `<div class='trip_link'><a href='#' class="my_list_add" name='${tdata.spot}'>담기</a></div>` +
-                                          `<div class='trip_link'><a href='${tdata.viewUrl}' target='_blank'>360</a></div>` +
+                                          `<div class='trip_link'><a href='${tdata.viewUrl}' target='_blank'>View</a></div>` +
                                           `<ul class="trip_info">` +
                                             `<li class="trip_info_desc"><p>${tdata.description}</p></li>` +
                                             `<li class="trip_info_addr">` +
@@ -124,7 +126,7 @@ function createAutoSearchTripList(trip_data){
 function createMyTrip(spot){
   $(".menu_1_info").append(`<li class="my_trip_list_li" id="${spot}" name="${spot}">` +
                               `<span class="my_trip_span" name="${spot}">${spot}</span>` +
-                              `<div class='trip_close' name='${spot}'></div>` +
+                              `<div class='trip_close' name='${spot}'>x</div>` +
                             `</li>`);
 }
 
@@ -199,6 +201,7 @@ function createPath(path_data){
 
   map.setCenter(new Tmapv2.LatLng(x,y));
   map.setZoom(13);
+  pathCheck = true;
 }
 
 /* 경로 정보 생성*/
@@ -209,4 +212,12 @@ function createPathData(path_data_features){
   let time = " 총 시간: " + (fdata[0].properties.totalTime / 60).toFixed(0) + "분";
 
   $('#path_data').text(distance + time);
+}
+
+/* 빈 리스트 생성 */
+function tripListRemove(){
+  $(".container_trip_list").children().remove();
+  $(".container_trip_list").append( `<div class="removeList_box">` +
+                                      `<p>검색한 여행지가 없습니다.</p>` +
+                                    `</div>`);
 }
