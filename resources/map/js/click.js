@@ -56,11 +56,31 @@ $(document).ready(function(){
 
   /* 나의 여행지 리스트에 담기 */
   $(document).on("click", ".my_list_add", function(){
+    let ms = $('.menu_1_info').children().length;
+     if(ms != 0){
+      let spot = $(this).attr("name");
+      let d;
+      for(let i=0; i<ms; i++){
+        d = document.getElementsByClassName('my_trip_list_li')[i].id;
+        if(spot === d){
+          alert("이미 리스트에 추가했습니다.");
+          return;
+        }
+      }
+     }
+     cnt++;
+     $("#cnt").text(cnt);
     if(pathCheck){
+      const size = markers.length;
+      let g = mm.length;
       let c = confirm("현재 경로를 취소하겠습니까?");
       if(c){
-        for(let i=0; i<markers.length; i++){
+        
+        for(let i=0; i<size; i++){
           markers[i].setMap(null);
+        }
+        for(let i=0; i<g; i++){
+          mm[i].setMap(null);
         }
         pathClose();
         pathCheck = false;  
@@ -77,9 +97,11 @@ $(document).ready(function(){
   $(document).on("click", ".trip_close", function(){
     const spot = $(this).attr("name");
     $('.menu_1_info').children(`#${spot}`).remove();
-  
+    cnt--;
+    $("#cnt").text(cnt);
     if(marker._marker_data.options.title === spot){
       marker.setMap(null);
+      
     }
 
     if($(".menu_1_info").children().length == 0){
@@ -113,12 +135,14 @@ $(document).ready(function(){
       $("#bus").css("background-color", "#e6e6e6");
       $("#car").css("background-color", "#fbfbfb");
       $("#bicycle").css("background-color", "#fbfbfb");
+      $('#path_data').text(`총 거리: -  총 시간: -`);
       pathBus();
     }
     else{
       $("#bicycle").css("background-color", "#e6e6e6");
       $("#bus").css("background-color", "#fbfbfb");
       $("#car").css("background-color", "#fbfbfb");
+      $('#path_data').text(`총 거리: -  총 시간: -`);
       pathBicycle();
     }
   });

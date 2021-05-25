@@ -15,6 +15,8 @@
     let markers = [];
     let new_polyLine = [];
     let pathCheck = false;
+    let cnt = 0;
+    let mm = [];
 
     /* 맵 생성 */
     $(document).ready(function(){
@@ -67,7 +69,7 @@
         </div>
         <ul class="map_menubar">
           <li id="menu_1">
-            <span>My Trip</span>
+            <span>My Trip(<span id="cnt">0</span>)</span>
             <ul class="menu_1_info">
               <!-- 나의 여행 리스트 -->
             </ul>
