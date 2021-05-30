@@ -12,58 +12,111 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       // 검색어 값을 map.html로 넘기기
-      $(document).on("click", "#search", function(){
+      $(document).on("click", "#search_img", function(){
         let search_input = $("#search_input").val();
 
         sessionStorage.setItem("search_input", search_input);
         
         location.href = "map.html";
       });
+      //마우스 휠 이벤트
+      window.onload = function () {
+        var elm = ".box";
+        $(elm).each(function (index) {
+          $(this).on("mousewheel DOMMouseScroll", function (e) {
+            e.preventDefault();
+            var delta = 0;
+            if (!event) event = window.event;
+            if (event.wheelDelta) {
+              delta = event.wheelDelta / 120;
+              if (window.opera) delta = -delta;
+            } 
+            else if (event.detail)
+              delta = -event.detail / 3;
+            var moveTop = $(window).scrollTop();
+            var elmSelecter = $(elm).eq(index);
+            // 마우스휠을 위에서 아래로
+            if (delta < 0) {
+              if ($(elmSelecter).next() != undefined) {
+                try{
+                  moveTop = $(elmSelecter).next().offset().top;
+                }catch(e){}
+              }
+            // 마우스휠을 아래에서 위로
+            } else {
+              if ($(elmSelecter).prev() != undefined) {
+                try{
+                  moveTop = $(elmSelecter).prev().offset().top;
+                }catch(e){}
+               }
+            }
+            // 화면 이동 0.8초(800)
+            $("html,body").stop().animate({
+              scrollTop: moveTop + 'px'
+            }, {
+              duration: 800, complete: function () {
+              }
+            });
+          });
+        });
+      }
+      $(document).on("click", "#down_arrow", function(){
+        var moveTop = $(window).scrollTop();
+        var elmSelecter = $(".box").eq(0);
+        moveTop = $(elmSelecter).next().offset().top;
+        $("html,body").stop().animate({scrollTop: moveTop + 'px'}, {
+          duration: 800, complete: function () {
+          }
+        });
+      });
+      $(document).on("click", "#up_arrow", function(){
+        var moveTop = $(window).scrollTop();
+        var elmSelecter = $(".box").eq(1);
+        moveTop = $(elmSelecter).next().offset().top;
+        $("html,body").stop().animate({scrollTop: moveTop + 'px'}, {
+          duration: 800, complete: function () {
+          }
+        });
+      });
+
+      $(document).ready(function(){
+        $(document).on("click", "#search_input", function(){
+          $("#search_input").val(" ");
+        });
+      });
+      
     </script>
 
   </head>
   <body>
-    
-    <header>
-      <div class="wrapper">
-        <h1 onclick="location.href='main.html'"> LOGO </h1>
-        <!--<img src="LOGO.png" width="5%", height="5%"> -->
-        <!-- <ul class="menu">
-          <li><a href="#">이달의 추천 여행지(준비중)</a></li>
-          <li><a href="#">나의 루트(준비중)</a></li>
-        </ul> -->
+    <div id="search" class="box">
+      <div class="logo">
+        <a href="main.html">
+          <img src="resources/main/images/logo_blue.png">
+        </a>
       </div>
-    </header>
-    <section>
-      <div class="search">
-        <img id="search_img" src="resources/main/images/subway.jpg">
-        <div class="search_t">
-          <h2>어디로 떠나실까요?</h2><br>
-          <div class="search_i">
-            <input id="search_input" type="text" value="강원도 춘천시">
-            <img src="resources/main/images/loupe.png" id="search"> <!-- onclick 삭제, id 추가 -->
-          </div>
+      <img id="search_back" src="resources/main/images/east_sea.jpg">
+      <div class="search_t">
+        <!-- <h2>어디로 떠나실까요?</h2><br> -->
+        <div class="search_i">
+          <input id="search_input" type="text" value="어디로 떠나실까요?">
+          <img id="search_img" src="resources/main/images/loupe_blue.png"> <!-- onclick 삭제, id 추가 -->
+          <ul class="auto_search_output">
+            <!-- 검색 자동완성 리스트 -->
+          </ul>
         </div>
       </div>
+      <div>
+        <img id="down_arrow" src="resources/main/images/down-arrow_blue.png">
+      </div>
+    </div>
+    <div id="under"  class="box">
       <br>
-      <!-- <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="http://placehold.it/1200x400">
-          </div>
-          <div class="swiper-slide">Slide 2</div>
-          <div class="swiper-slide">Slide 3</div>        
-        </div>
-        <div class="swiper-pagination"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-scrollbar"></div>
-      </div> -->
-      
       <div class="content">
         <div class="content_text">
-          <span>최근 찾아본 관광지</span>
+          <span>추천 관광지</span>
         </div>
+        <br>
         <div class="content_box">
           <img src="http://placehold.it/300x200">
           <p>
@@ -86,30 +139,16 @@
           </p>
         </div>
       </div>
-    </section>
-    <!-- <footer>
-      <div class="footer">
-          <div>
-          <p>copyright</p>
-          </div>
+      <div id="up_arrow_box">
+        <img id="up_arrow" src="resources/main/images/up-arrow_blue.png">
       </div>
-  </footer> -->
-    <!-- <script type="text/javascript" src="main.js"></script> -->
-    <!-- <script src="https://unpkg.com/swiper/swiper-bundle.min.js">
-      $document.ready(function() { new Swiper('.swiper-container', {
-        // 자동높이 사용여부 : 사용하지 않을시 기본값은 false
-        autoHeight : true,
-
-        loop : true, // 슬라이드 반복
-        pagination : { // 페이징
-          el : '.swiper-pagination',
-          clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
-        },
-        navigation : { // 네비게이션
-          nextEl : '.swiper-button-next', // 다음 버튼 클래스명
-          prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
-        }
-      })}); 
-    </script> -->
+      <footer>
+        <div class="footer">
+            <div>
+            <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+            </div>
+        </div>
+      </footer>
+    </div>   
   </body>
 </html>
