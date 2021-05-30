@@ -115,6 +115,10 @@ body{
     border: 1px solid rgb(209, 209, 209);
     border-radius: 0.2em 0.2em;
 }
+.content .content_box img{
+    width: 300px;
+    height: 200px;
+}
 .content_box:hover{
     border: 1.5px solid #168BF2;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%);

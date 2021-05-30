@@ -83,10 +83,49 @@
         $(document).on("click", "#search_input", function(){
           $("#search_input").val(" ");
         });
-      });
-      
-    </script>
 
+        // view 넘어가시
+        $(document).on("click", ".link", function(){
+          let viewPath = $(this).attr("name");
+          sessionStorage.setItem("path", viewPath);
+          location.href = "viewVR.html";
+        });
+
+        // 관광지 리스트
+        $.ajax({
+          url : "./resources/map/json/trip_data.json",
+          type : "GET",
+          dataType : "json",
+          success: function(response){
+            randomList(response.data);
+          },
+          error: function(){
+            alert("Error");
+          }
+        });
+      });
+      function randomList(trip_data){
+        let data0 = trip_data[0];
+        let data1 = trip_data[1];
+        let data5 = trip_data[5];
+        
+        $(".content").append(`<div class="content_box">` +
+                                  `<img src='${data0.image}'>` +
+                                  `<p><h4>${data0.spot}</h4>` +
+                                  `<a href="#" class="link" name='${data0.spot}'>둘러보기</a>`+
+                                `</p></div>`);
+        $(".content").append(`<div class="content_box">` +
+                                  `<img src='${data1.image}'>` +
+                                  `<p><h4>${data1.spot}</h4>` +
+                                  `<a href="#" class="link" name='${data1.spot}'>둘러보기</a>`+
+                                `</p></div>`);
+        $(".content").append(`<div class="content_box">` +
+                                  `<img src='${data5.image}'>` +
+                                  `<p><h4>${data5.spot}</h4>` +
+                                  `<a href="#" class="link" name='${data5.spot}'>둘러보기</a>`+
+                                `</p></div>`);
+      }
+    </script>
   </head>
   <body>
     <div id="search" class="box">
@@ -117,7 +156,7 @@
           <span>추천 관광지</span>
         </div>
         <br>
-        <div class="content_box">
+        <!-- <div class="content_box">
           <img src="http://placehold.it/300x200">
           <p>
             <h4>관광지이름</h4>
@@ -137,7 +176,7 @@
             <h4>관광지이름</h4>
             <a href="viewVR.html">둘러보기</a>
           </p>
-        </div>
+        </div> -->
       </div>
       <div id="up_arrow_box">
         <img id="up_arrow" src="resources/main/images/up-arrow_blue.png">
