@@ -1,3 +1,9 @@
+@import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+
+*{
+  font-family: 'Jeju Gothic', serif;
+  font-weight: 300;
+}
 .container_map{
   position: relative;
   width: 75%;
@@ -92,7 +98,7 @@
   border: solid 2px #fff;
   border-radius: 5px;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%);
-  font-weight: bold;
+  font-weight: 500;
   line-height: 5vh;
   text-align: center;
 }
