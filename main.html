@@ -21,6 +21,9 @@
       });
       //마우스 휠 이벤트
       window.onload = function () {
+        move();
+      }
+      function move(){
         var elm = ".box";
         $(elm).each(function (index) {
           $(this).on("mousewheel DOMMouseScroll", function (e) {
@@ -80,11 +83,16 @@
       });
 
       $(document).ready(function(){
-        $(document).on("click", "#search_input", function(){
-          $("#search_input").val(" ");
+        $(document).on("click", ".auto_search_trip_list", function(){
+          let value = $(this).attr("name");
+          $(".auto_search_output").children().remove();
+          $('.auto_search_output').css("display", "none");
+          $("#search_input").val(value);
         });
 
-        // view 넘어가시
+        $(document).on("click", "#search_input", function(){
+          $("#search_input").val("");
+        });
         $(document).on("click", ".link", function(){
           let viewPath = $(this).attr("name");
           sessionStorage.setItem("path", viewPath);
@@ -104,6 +112,8 @@
           }
         });
       });
+      
+
       function randomList(trip_data){
         let data0 = trip_data[0];
         let data1 = trip_data[1];
@@ -125,7 +135,10 @@
                                   `<a href="#" class="link" name='${data5.spot}'>둘러보기</a>`+
                                 `</p></div>`);
       }
+      
     </script>
+    <script type="text/javascript" src="/resources/main/js/search.js"></script>  
+
   </head>
   <body>
     <div id="search" class="box">
@@ -156,27 +169,7 @@
           <span>추천 관광지</span>
         </div>
         <br>
-        <!-- <div class="content_box">
-          <img src="http://placehold.it/300x200">
-          <p>
-            <h4>관광지이름</h4>
-            <a href="viewVR.html">둘러보기</a>
-          </p>
-        </div>
-        <div class="content_box">
-          <img src="http://placehold.it/300x200">
-          <p>
-            <h4>관광지이름</h4>
-            <a href="viewVR.html">둘러보기</a>
-          </p>
-        </div>
-        <div class="content_box">
-          <img src="http://placehold.it/300x200">
-          <p>
-            <h4>관광지이름</h4>
-            <a href="viewVR.html">둘러보기</a>
-          </p>
-        </div> -->
+        
       </div>
       <div id="up_arrow_box">
         <img id="up_arrow" src="resources/main/images/up-arrow_blue.png">
@@ -184,7 +177,8 @@
       <footer>
         <div class="footer">
             <div>
-            <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+              Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a>, <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+              <p>design by TRAVELER</p>
             </div>
         </div>
       </footer>

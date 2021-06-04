@@ -22,7 +22,7 @@ body{
 .logo img{
     width: 20vw;
     z-index: 0;
-    opacity: 1;
+    /* opacity: ; */
 }
 
 #search {
@@ -82,23 +82,24 @@ body{
 
 #down_arrow{
     position: absolute;
-    width: 5vw;
+    width: 4vw;
     top: 85%;
     left: 48vw;
 }
 #up_arrow_box{
     position: absolute;
-    top: 170vh;
+    top: 175vh;
     left: 48vw;
 }
 #up_arrow{
-    width: 5vw;
+    width: 4vw;
     right: 50vw;
 }
 /*------------------------------------*/
 #under{
     width: 100vw;
     height: 100vh;
+    background-color: #fbfbfb;
 }
 .content{
     width: 100vw;
@@ -107,7 +108,7 @@ body{
     width: max-content;
     text-align: center;
     margin: 0 auto;
-    padding-top: 30px;
+    padding-top: 50px;
 }
 .content .content_box {
     float: left;
@@ -120,8 +121,8 @@ body{
     height: 200px;
 }
 .content_box:hover{
-    border: 1.5px solid #168BF2;
-    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%);
+    border: 1.2px solid #168BF2;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 12%);
 }
 .content .content_text{
     font-size: 30px;
@@ -154,19 +155,21 @@ body{
   }
 
 .footer{
+    position: absolute;
     display: inline-block;
-    bottom:0;
-    right:0;
+    /* bottom:0;
+    right:0; */
     z-index:9999;
-    height:15vh; 
+    height:13vh; 
     width:100vw;
     background-color: #168BF2;
     color:white;
     text-align: center;
-    line-height:100px;
- 
+    line-height:30px;
 }
-
+.footer div{
+    padding-top: 30px;
+}
 .search_t {
     animation: fadein 2s;
     -moz-animation: fadein 2s; /* Firefox */
@@ -205,3 +208,37 @@ body{
         opacity: 1;
     }
 }
+
+/* -------------------- */
+.auto_search_output{
+    overflow: scroll;
+    overflow-x: hidden;
+    position: absolute;
+    width: 20vw;
+    height: 30vh;
+    left: 17vw;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 0 0 5px 5px;
+    display: none;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%);
+  }
+  .auto_search_output li{
+    padding: 8px 0;
+    list-style-type: none;
+  }
+  .auto_search_output li:hover{
+    cursor: pointer;
+    background-color: lightgray;
+  }
+  .auto_search_output li img{
+    left: 0;
+  }
+  #astl_img{
+      width: 10px;
+  }
+  .auto_search_output li div{
+    text-align: left;
+    width: 12vw;
+    display: inline-block;
+  }
