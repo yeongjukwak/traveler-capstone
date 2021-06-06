@@ -9,7 +9,10 @@
   <link rel="stylesheet" type="text/css" href="./resources/map/css/trip_info_box.css">
   <title>Document</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxf9565457f2b4447191f7d70c4c1790b4"></script>
+  <script>
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    $('head').append("<script src='https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=" + API_KEY +"'/>");
+  </script>
   <script>
     let map, marker;
     let markers = [];
