@@ -7,7 +7,7 @@
             "image" : "./resources/map/images/trip_img/조각공원.JPG",
             "x" : "127.71347503775486",
             "y" : "37.87281030885807",
-            "viewUrl" : "error.html",
+            "viewUrl" : "resources/view/Build_Jogak/Downloads.json",
             "new_addr" : "강원도 춘천시 근화동",
             "old_addr" : "-",
             "tell" : "033-250-3089"
@@ -19,7 +19,7 @@
             "image" : "https://search.pstatic.net/common/?autoRotate=true&quality=95&type=w750&src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20191002_81%2F1569946043924kK8RV_JPEG%2FOeerLnhdBmo_FEJ5oGCRKvTR.jpg",
             "x" : "127.72367157078028",
             "y" : "37.894471737015586",
-            "viewUrl" : "error.html",
+            "viewUrl" : "resources/view/Build_SkyWalk/Downloads.json",
             "new_addr" : "강원도 춘천시 영서로 2663",
             "old_addr" : "(우)24239 (지번)근화동 8-1",
             "tell" : "033-240-1695"
@@ -67,7 +67,7 @@
             "image" : "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxODAyMDhfMzkg%2FMDAxNTE4MTAxMzk4OTY3.JzfEGOKNqzaxwKhxOdKmXqPe2UVbHiwoE2IthMVU9f4g.mO1l2At8M9zvFZT7z2gooAAQyRLzb3kaW5PWd6T0p08g.JPEG.toyou10123%2F20180208_153330.jpg%231920x1080",
             "x" : "127.70488723521589",
             "y" : "37.8738800926302",
-            "viewUrl" : "error.html",
+            "viewUrl" : "resources/view/Build_ChunCheonJunJeok/Downloads.json",
             "new_addr" : "강원도 춘천시 수변공원길 45",
             "old_addr" : "(우)24239 (지번)삼천동 239-1",
             "tell" : "-"

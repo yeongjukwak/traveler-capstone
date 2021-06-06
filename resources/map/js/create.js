@@ -61,7 +61,6 @@ function createTripList(trip_data){
     //$(".container_trip_list").children().remove();
   }
 }
-
 /* 여행지 정보 생성 */
 function createTripInformation(trip_data, spot){
   let tdata;
@@ -74,8 +73,8 @@ function createTripInformation(trip_data, spot){
                                         `<div class="trip_img_box" style="background-image:url(${tdata.image})"></div>` +
                                         `<div class="trip_info_box">` +
                                           `<p>${tdata.spot}</p>` +
-                                          `<div class='trip_link'><a href='#' class="my_list_add" name='${tdata.spot}'>담기</a></div>` +
-                                          `<div class='trip_link'><a href='${tdata.viewUrl}' target='_blank'>View</a></div>` +
+                                          `<div class='trip_link'><a href='#' class="my_list_add" id = 'state_name' name='${tdata.spot}'>담기</a></div>` +
+                                          `<div class='trip_link'><a href='#' target='_blank' id = "linkToView">View</a></div>` +
                                           `<ul class="trip_info">` +
                                             `<li class="trip_info_desc"><p>${tdata.description}</p></li>` +
                                             `<li class="trip_info_addr">` +

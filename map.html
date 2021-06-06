@@ -28,6 +28,14 @@
       });
     });
   </script>
+  <script>
+    //  view 버튼 리스너 VR.html로 넘기기
+    $(document).on("click", "#linkToView", function(){
+      let viewPath = $("#state_name").attr("name");
+      sessionStorage.setItem("path", viewPath);
+      location.href = "viewVR.html";
+    });
+  </script>
   <script type="text/javascript" src="./resources/map/js/gps.js"></script>
   <script type="text/javascript" src="./resources/map/js/path.js"></script>
   <script type="text/javascript" src="./resources/map/js/click.js"></script>
