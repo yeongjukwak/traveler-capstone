@@ -4,136 +4,311 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="./resources/main/css/main.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <title>Document</title>
-    <style>
-      section {
-        margin-left: 10%;
-        margin-right: 10%;
-      }
-      .contact{
-        margin-top: 50px;
+    <link rel="stylesheet" type="text/css" href="resources/view/css/viewPage.css">
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxf9565457f2b4447191f7d70c4c1790b4"></script>
+    <script src = "https://code.jquery.com/jquery-latest.js"></script>
+    <script>
 
-      }
-      .contact #state_name {
-        font-size: 40px;
-        margin-bottom: 20px;
-      }
-      .contact .contact_VR {        
-        padding-left: 15%;
-        padding-bottom: 10px;
-      }
-      .contact .contact_text{
-        padding-top: 3%;
-        padding-left: 10%;   
-        padding-bottom: 5%;
-      }
+      /* 맵 생성 */
+      
 
-      .review{
-        margin: 5%;
-        padding: 5%;
+    </script>
 
-      }
-      .review_title{
-        font-size: 25px;
-      }
-      .review_input #review_input_text{
-        float: left;
-        margin-top: 30px;
-        width: 850px;
-        height: 50px;
-        padding: 10px;
-      }
-      .review_input input[type="button"]{
-        margin-top: 30px;
-        width: 70px;
-        height: 70px;
-      }
-      .review_content {
-        width: auto;
-      }
-      .review_content hr{
-        width: 97%;
-      }
+<!--
+    <script type="text/javascript" src="./resources/map/js/gps.js"></script>
+    <script type="text/javascript" src="./resources/map/js/path.js"></script>
+    <script type="text/javascript" src="./resources/map/js/click.js"></script>
+    <script type="text/javascript" src="./resources/map/js/search.js"></script>
+    <script type="text/javascript" src="./resources/map/js/create.js"></script>-->
+    <script src="resources/view/Build/UnityProgress.js"></script>
+    <script src="resources/view/Build/UnityLoader.js"></script>
+    <script>
+      let map, marker;
+      let markers = [];
+      let new_polyLine = [];
 
-    </style>
+      //받아올 파라메터값
+      let buildPath = "resources/view/Build/Downloads.json";
+      var gameInstance = UnityLoader.instantiate("gameContainer", buildPath, {onProgress: UnityProgress});
+      let point = new Tmapv2.LatLng(37.8863541, 127.73577569999999);
+      var stateName = "defalut";
+      var subDescription = "defalut";
+      var description = "description";
+      var new_addr = "address new";
+      var old_addr = "address old";
+      var tell = "tellnum";
+      $(document).ready(function(){
+          //상단 info동작
+          $('#wrapperInfo').click(function(e) { 
+            var divTop = e.pageY+40;
+            var divLeft = e.pageX+ 200;
+            var idx = $(this).attr("idx"); 
+            $('#divView').empty().append('<div style="z-index: 3; border-radius : 6px; box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%); background-color : #fdfdfd; width : 20vw; height : 25vh; padding-top:20px; position:absolute;top:5px;right:5px; font-weight : bold"><span id="close" style="cursor:pointer;font-size:1.5em;float : right;padding-right : 5px" title="닫기">X</span><p style = "font-size : 2em">  <img src = "resources/map/images/marker/locationPin.svg" style = "width : 40px; height : 40px"> '+stateName+'</p><br><hr><br>카테고리 : '+ description + '<br> 설명 : '+ subDescription +'<br> 구 주소 : '+ old_addr +'<br> 신 주소 : '+ new_addr +'<br>전화 번호 : '+ tell +'</div>');
+            $('#divView').css({ "top": divTop ,"left": divLeft , "position": "absolute" }).show();
+            $('#close').click(function(){document.getElementById('divView').style.display='none'}); 
+          });
+          //상단 Map 동작
+          $(document).on("click", "#wrapperMap", function(e) {
+            $('#map_div').css("display","block");
+            $('#map_close').append('<div id = "map_close" style="cursor:pointer; position:absolute; width : 10px; height: 10px;font-size: 1.5em; z-index: 3;top:10px;right:5px;padding-right: 10px; display="inline">X</div>');
+            //미니맵 로더
+            map = new Tmapv2.Map("map_div", {
+            center : point,
+            zoom : 15,
+            zoomControl: false,
+            scrollwheel: true
+            });
+            $('#map_close').click(function(){ map.destroy(); $('#map_close').empty(); $('#map_div').css("display","none")});
+          });
+          //상단 검색바
  
+          //가져온 검색 값
+          const path = sessionStorage.getItem("path");
+          //$("#state_name").text( path + "경로");
+          //console.log(sessionStorage.getItem("path"));
+
+          $.ajax({
+            url : "./resources/map/json/trip_data.json",
+            type : "GET",
+            dataType : "json",
+            success: function(response){
+              getViewPath(response.data , path);
+            },
+            error: function(error){
+              alert("Trip view error");
+            }
+          });
+          function getViewPath(trip_data, path){
+            for(i = 0 ; i < trip_data.length ; i++){
+              if(path == trip_data[i].spot){
+                buildPath = trip_data[i].viewUrl;
+                stateName = trip_data[i].spot;
+                point = new Tmapv2.LatLng(trip_data[i].y, trip_data[i].x);
+                subDescription = trip_data[i].subDescription;
+                description = trip_data[i].description;
+                new_addr = trip_data[i].new_addr;
+                old_addr = trip_data[i].old_addr;
+                tell = trip_data[i].tell;
+              }
+            }
+            console.log("mapx" + point);
+            console.log("paht" + buildPath);
+            $('#state_name').text(stateName);
+            var gameInstance = UnityLoader.instantiate("gameContainer", buildPath, {onProgress: UnityProgress});
+            
+          }
+          /* 검색 자동완성 */
+          $("#search_input").keyup(function(key){
+            if(marker){ marker.setMap(null); }
+            
+            $.ajax({
+              url : "./resources/map/json/trip_data.json",
+              type : "GET",
+              dataType : "json",
+              success: function(response){
+                if(key.keyCode == 13){
+                  $('.auto_search_output').css("display", "none");
+                  createTripList(response.data);
+                }
+                else{
+
+
+                  createAutoSearchTripList(response.data);
+                }
+              },
+              error: function(){
+                alert("search.js_1 Error.");
+              }
+            });
+          });
+
+          
+        
+          
+/* 여행지 리스트 생성 */
+function createTripList(trip_data){
+  const search_input = $("#search_input").val();
+  let tdata;
+
+  if(search_input != ""){ 
+    $(".container_trip_list").children().remove();
+
+    for(let i=0; i<trip_data.length; i++){
+      tdata = trip_data[i];
+
+      if(tdata.spot.indexOf(search_input) > -1
+          || tdata.description.indexOf(search_input) > -1
+          || tdata.new_addr.indexOf(search_input) > -1
+          || tdata.old_addr.indexOf(search_input) > -1){
+        $(".container_trip_list").append(`<li class='container_list_li' name="${tdata.spot}">` +
+                                          //`<div class="trip_list_img" style="background-image:url(${tdata.image})"></div>` +
+                                          `<img src='${tdata.image}'>` +
+                                          `<div class='container_list_li_name'>` +
+                                            `<p>${tdata.spot}</p>` +
+                                            `<p>${tdata.description}</p>` +
+                                          `</div>` +
+                                        `</li>`);
+      }
+    }
+  }
+  else{
+    tripListRemove();
+    //$(".container_trip_list").children().remove();
+  }
+}
+
+/* 여행지 정보 생성 */
+function createTripInformation(trip_data, spot){
+  let tdata;
+  for(let i=0; i<trip_data.length; i++){
+    tdata = trip_data[i];
+    
+    if(spot === tdata.spot){
+      stateName = tdata.spot;
+      buildPath = tdata.viewUrl;
+      point = new Tmapv2.LatLng(tdata.y, tdata.x);
+      subDescription = tdata.subDescription;
+      description = tdata.description;
+      new_addr = tdata.new_addr;
+      old_addr = tdata.old_addr;
+      tell = tdata.tell;
+
+
+      $('#state_name').text(stateName);
+      
+      var gameInstance = UnityLoader.instantiate("gameContainer", buildPath, {onProgress: UnityProgress});
+      return;
+    }
+  }
+}
+
+/* 검색 자동완성 리스트 생성 */
+function createAutoSearchTripList(trip_data){
+  const search_input = $("#search_input").val();
+  let tdata;
+
+  if(search_input != ""){ 
+    $(".auto_search_output").children().remove();
+
+    for(let i=0; i<trip_data.length; i++){
+      tdata = trip_data[i];
+      if(tdata.spot.indexOf(search_input) > -1
+          || tdata.description.indexOf(search_input) > -1
+          || tdata.new_addr.indexOf(search_input) > -1
+          || tdata.old_addr.indexOf(search_input) > -1){
+        $('.auto_search_output').css("display", "block");
+        $(".auto_search_output").append(`<li class="auto_search_trip_list" name="${tdata.spot}">` +
+                                          `<img src="./resources/map/images/marker/locationPin.svg">` +
+                                          `<div>` +
+                                            `<p style="font-size: 16px; font-weight: bold;">${tdata.spot}</p>` +
+                                            `<p style="font-size: 12px;">${tdata.new_addr}</p>` +
+                                          `</div>` +
+                                        `</li>`);
+      }
+    }
+  }
+  else{
+    $(".auto_search_output").children().remove();
+    $('.auto_search_output').css("display", "none");
+  }
+}
+
+          
+function tripListRemove(){
+  $(".container_trip_list").children().remove();
+  $(".container_trip_list").append( `<div class="removeList_box">` +
+                                      `<p>검색한 여행지가 없습니다.</p>` +
+                                    `</div>`);
+}
+
+
+  /* 검색 자동완성 여행지 리스트에서 선택 시 */
+  $(document).on('click', '.auto_search_trip_list', function(){
+    $('.auto_search_output').css('display', 'none');
+    const spot = $(this).attr("name");
+
+    $.ajax({
+      url : "./resources/map/json/trip_data.json",
+      type : "GET",
+      dataType : "json",
+      success: function(response){
+        createTripInformation(response.data, spot);
+        //map.destroy();
+        $('#map_close').empty(); $('#map_div').css("display","none");
+      },
+      error: function(){
+        alert("click.js_2 Error.");
+      }
+    });
+  });
+
+          //일단 만들어놓은 화면 변환부
+          $("#search_click").click(function(){
+
+            buildPath = "resources/view/Build_soyangGirl/Downloads.json";
+            var gameInstance = UnityLoader.instantiate("gameContainer", buildPath, {onProgress: UnityProgress});
+            $('#state_name').text(stateName);
+          });
+
+          //반응형 동작을 위한 크기별 화면 리로드
+          $(window).resize(function(){
+              location.reload();
+          });
+    
+        });
+    </script>
+
+    <title>Document</title>
+<style>
+
+
+
+  </style>
   </head>
   <body>
-    <header>
-      <div class="wrapper">
-        <h1 onclick="location.href='main.html'"> LOGO </h1>
-        <!--<img src="LOGO.png" width="5%", height="5%"> -->
-        <ul class="menu">
-          <li><a href="#">이달의 추천 여행지(준비중)</a></li>
-          <li><a href="#">나의 루트(준비중)</a></li>
-        </ul>
-      </div>
-    </header>
-    <section>
-      <div class="contact">
-        <p id="state_name">관광지 이름</p>
-        <div class="contact_VR">
-          <img src="http://placehold.it/900x500">
-          <!--로드뷰 넣기-->
-        </div>
-        <div class="contact_text">
-          <p>설명~
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero eos dolorum quaerat quam fugit harum id distinctio! Hic consectetur laboriosam incidunt neque soluta, odit voluptatibus deserunt blanditiis excepturi. Expedita, atque.
-          </p>
-        </div>
-      </div>
-  
-      <div class="content">
-        <div class="content_text">
-          <span> 근처 관광지 둘러보기</span>
-        </div>
-        <div class="content_box">
-          <img src="http://placehold.it/300x200">
-          <p>
-            <h4>관광지이름</h4>
-            <a href="viewVR.html">둘러보기</a>
-          </p>
-        </div>
-        <div class="content_box">
-          <img src="http://placehold.it/300x200">
-          <p>
-            <h4>관광지이름</h4>
-            <a href="viewVR.html">둘러보기</a>
-          </p>
-        </div>
-        <div class="content_box">
-          <img src="http://placehold.it/300x200">
-          <p>
-            <h4>관광지이름</h4>
-            <a href="viewVR.html">둘러보기</a>
-          </p>
-        </div>
-      </div>
 
-      <div class="review">
-        <div class="review_title">
-          <p>여행자 평점 <span id="review_grade">4.3 ★★★★☆</span></p>
-        </div>
-        <div class="review_input">
-          <textarea id="review_input_text"></textarea>
-          <input type="button" value="등록">
-        </div><br>
-        <div class="review_content">
-          <p id="review_id">nickname  id****  xxxx-xx-xx</p><br>
-          <p id="review_text">Lorem ipsum, dolor sit amet consectetur adipisicing elit.lo Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus similique qui esse ex odio architecto sint inventore, placeat, quidem nostrum repellendus deleniti consequuntur fuga minima expedita provident eius repellat non.</p>
-          <br><hr>
+    <div class = "header">
+      <div id = "logo">
+        <!--<span style = "color: white; font-size: 60px; line-height: 80px; padding-left: 30px;">Traveler</span>-->
+        <img src = "/resources/view/image/logo.png">
+      </div>
+      
+      <div class="search_i">
+        <div class = "txtBox">
+          <input type="text"id="search_input"value="" contenteditable="true">
         </div>
       </div>
-    </section>
-    
-    <footer>
-      <div class="footer">
-          <div>
-          <p>copyright</p>
+      <ul class="auto_search_output">
+        
+      </ul>
+      <div id = "icons">
+        <div id = "wrapperInfo" ><img src = "resources/view/image/Info_icon_copy.png"> Info</div>
+        <div id = "wrapperMap"><img src = "resources/view/image/map_icon.png"> Map</div>
+      </div>
+    </div>
+
+    <section>
+      
+      <!-- <div id="state_name"><img src = "resources/map/images/marker/locationPin.svg" style = "width : 30px; height : 30px; display: flex;"></div> 
+
+
+
+
+       <div class="contact">
+          <div class="webgl-content">
+            
           </div>
-      </div>
-  </footer>
-  </body>
+        </div>-->
+        
+        <div id = "imgameFrame">
+          <img src = "resources/view/image/Rectangle4.png" id = "sticker">
+          <div id="gameContainer"></div>
+          <div id = "state_name"></div>
+        </div>
+    </section>
+  
+    <div id="divView"></div>
+    <div id = "map_div"></div>
+    <div id="map_close"></div>
+    
 </html>
