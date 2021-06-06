@@ -34,6 +34,14 @@ $(document).ready(function(){
       zoomControl: false,
       scrollwheel: true
       });
+
+      marker = new Tmapv2.Marker({
+        position : point,
+        icon : "/resources/map/images/marker/locationPin.svg",
+        iconSize : new Tmapv2.Size(30, 30),
+        map : map,
+        title : stateName
+      });
       $('#map_close').click(function(){ map.destroy(); $('#map_close').empty(); $('#map_div').css("display","none")});
     });
     //상단 검색바
