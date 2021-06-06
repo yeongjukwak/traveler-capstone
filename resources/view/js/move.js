@@ -19,7 +19,7 @@ $(document).ready(function(){
       var divTop = e.pageY+40;
       var divLeft = e.pageX+ 200;
       var idx = $(this).attr("idx"); 
-      $('#divView').empty().append('<div style="z-index: 3; border-radius : 6px; box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%); background-color : #fdfdfd; width : 20vw; height : 25vh; padding-top:20px; position:absolute;top:5px;right:5px; font-weight : bold"><span id="close" style="cursor:pointer;font-size:1.5em;float : right;padding-right : 5px" title="닫기">X</span><p style = "font-size : 2em">  <img src = "resources/map/images/marker/locationPin.svg" style = "width : 40px; height : 40px"> '+stateName+'</p><br><hr><br>카테고리 : '+ description + '<br> 설명 : '+ subDescription +'<br> 구 주소 : '+ old_addr +'<br> 신 주소 : '+ new_addr +'<br>전화 번호 : '+ tell +'</div>');
+      $('#divView').empty().append('<div id = "ViewInfoDiv"><span id="close" style="cursor:pointer;font-size:1.5em;float : right;padding-right : 65px; padding-top : 5px" title="닫기">X</span><p style = "font-size : 2em">'+stateName+'</p><br><div id = "infoscript">'+ description + '<br> <br>'+ subDescription +'<br><br> '+ old_addr +'<br><br>'+ new_addr +'<br><br>'+ tell +'</div></div>');
       $('#divView').css({ "top": divTop ,"left": divLeft , "position": "absolute" }).show();
       $('#close').click(function(){document.getElementById('divView').style.display='none'}); 
     });
@@ -65,11 +65,13 @@ $(document).ready(function(){
           new_addr = trip_data[i].new_addr;
           old_addr = trip_data[i].old_addr;
           tell = trip_data[i].tell;
+
         }
       }
       console.log("mapx" + point);
       console.log("paht" + buildPath);
       $('#state_name').text(stateName);
+      $('#descript').text(description);
       var gameInstance = UnityLoader.instantiate("gameContainer", buildPath, {onProgress: UnityProgress});
       
     }
@@ -148,7 +150,8 @@ $(document).ready(function(){
                 new_addr = tdata.new_addr;
                 old_addr = tdata.old_addr;
                 tell = tdata.tell;
-                $('#state_name').text(stateName);
+                $('#state_name').text( "#" + stateName);
+                $('#descript').text( "#" + description);
                 var gameInstance = UnityLoader.instantiate("gameContainer", buildPath, {onProgress: UnityProgress});
                 return;
             }
