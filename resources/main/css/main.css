@@ -236,6 +236,7 @@ body{
   .auto_search_output li{
     padding: 8px 0;
     list-style-type: none;
+    font-weight: 100;
   }
   .auto_search_output li:hover{
     cursor: pointer;

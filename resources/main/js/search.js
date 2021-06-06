@@ -31,7 +31,7 @@ function createAutoSearchTripList(trip_data){
           || tdata.old_addr.indexOf(search_input) > -1){
         $('.auto_search_output').css("display", "block");
         $(".auto_search_output").append(`<li class="auto_search_trip_list" name="${tdata.spot}">` +
-                                          `<img id="astl_img" src="./resources/map/images/marker/locationPin.svg">` +
+                                          // `<img id="astl_img" src="./resources/map/images/marker/locationPin.svg">` +
                                           `<div>` +
                                             `<p style="font-size: 16px; font-weight: bold;">${tdata.spot}</p>` +
                                             // `<p style="font-size: 12px;">${tdata.new_addr}</p>` +
