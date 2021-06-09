@@ -177,8 +177,16 @@ function createPath(path_data){
               startPt = new Tmapv2.LatLng(feature.geometry.coordinates[j][1],feature.geometry.coordinates[j][0]);
               ar_line.push(startPt);
               pointArray.push(feature.geometry.coordinates[j]);
-          }
 
+              // 라인 좌표들
+              // marker = new Tmapv2.Marker({
+              //   position : new Tmapv2.LatLng(pointArray[j][1], pointArray[j][0]),
+              //   icon : "./resources/map/images/marker/locationPin.svg",
+              //   iconSize : new Tmapv2.Size(30, 30),
+              //   map : map
+              // });
+          }
+          
           polyline = new Tmapv2.Polyline({
               path: ar_line,
               strokeColor: "#0000ff", 
