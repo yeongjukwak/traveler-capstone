@@ -16,7 +16,7 @@ function pathCar(){
   
 
   let headers = {};
-  headers["appKey"] = `${API_KEY}`;
+  headers["appKey"] = 키입력;
 
   let startX = markers[0]._marker_data.options.position._lng;
   let startY = markers[0]._marker_data.options.position._lat;
