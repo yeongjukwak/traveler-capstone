@@ -23,6 +23,8 @@ Map openAPI와 Unity를 활용하여 춘천 관광지 소개 및 경로 안내 �
 - 지도교수 : 이정근
 - 참여기업 : SeedsSoft
 
+[시연 영상](https://youtu.be/xC9cw0AmJks)
+
 ## 기술 스택
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=HTML5&logoColor=white"/></a>
 <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=CSS3&logoColor=white"/></a>
